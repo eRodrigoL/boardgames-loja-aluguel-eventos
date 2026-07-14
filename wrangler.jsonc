@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "boardgames-loja-aluguel-eventos",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-06",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "boardgames-local",
+      // UUID de exemplo; substitua pelo ID real antes de deploy ou migrations remotas.
+      "database_id": "00000000-0000-4000-8000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  // Nome de exemplo válido; substitua pelo bucket R2 real antes de deploy.
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "boardgames-media-example" }],
+  "vars": {
+    "PUBLIC_ORIGINS": "http://localhost:4200,http://127.0.0.1:4200",
+    "ACCESS_ISSUER": "https://REPLACE_WITH_TEAM_NAME.cloudflareaccess.com",
+    "ACCESS_AUDIENCE": "REPLACE_WITH_ACCESS_AUDIENCE",
+    "ACCESS_JWKS_URL": "https://REPLACE_WITH_TEAM_NAME.cloudflareaccess.com/cdn-cgi/access/certs",
+    "MAX_IMAGE_BYTES": "8388608",
+  },
+}

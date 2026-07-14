@@ -1,0 +1,6 @@
+# Apenas exemplos locais; não versione .dev.vars com valores reais.
+ACCESS_ISSUER=https://SEU_TIME.cloudflareaccess.com
+ACCESS_AUDIENCE=SUBSTITUA_PELA_AUDIENCE_DO_ACCESS
+ACCESS_JWKS_URL=https://SEU_TIME.cloudflareaccess.com/cdn-cgi/access/certs
+PUBLIC_ORIGINS=http://localhost:4200,http://127.0.0.1:4200
+MAX_IMAGE_BYTES=8388608
