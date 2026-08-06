@@ -1,0 +1,349 @@
+{
+  "users": [
+    {
+      "id": "0e0b252c-c42a-486d-918b-bf7f15f40b65",
+      "identitySubject": "development:comum",
+      "name": "Comum",
+      "email": "comum@dragaoimaginario.local",
+      "phone": null,
+      "city": "Vila dos Dados",
+      "provider": "email",
+      "role": "member"
+    },
+    {
+      "id": "82f1ec8f-6989-49d1-a17a-f0c7db0a0f92",
+      "identitySubject": "development:privilegiado",
+      "name": "Privilegiado",
+      "email": "admin@dragaoimaginario.local",
+      "phone": null,
+      "city": "Vila dos Dados",
+      "provider": "email",
+      "role": "admin"
+    },
+    {
+      "id": "9e8e33e1-d4c2-4bc1-8812-a34011426579",
+      "identitySubject": "development:total",
+      "name": "Total",
+      "email": "super-admin@dragaoimaginario.local",
+      "phone": null,
+      "city": "Vila dos Dados",
+      "provider": "email",
+      "role": "super_admin"
+    }
+  ],
+  "games": [
+    {
+      "id": "10f0e5d4-c3b2-4a19-8f76-1234567890ab",
+      "slug": "catan",
+      "name": "Catan",
+      "publisher": "Devir",
+      "minPlayers": 3,
+      "maxPlayers": 4,
+      "averageDurationMinutes": 75,
+      "minimumAge": 10,
+      "description": "Negocie recursos, construa estradas e expanda seus assentamentos pela ilha de Catan.",
+      "fullDescription": "Em Catan, cada pessoa administra uma colônia na ilha e usa os recursos obtidos pelos dados para construir estradas, assentamentos e cidades. A negociação entre jogadores é parte central da disputa pelos pontos de vitória.",
+      "weeklyRentalPriceCents": 3500,
+      "salePriceCents": 26990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": true,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "e5f6a7b8-c9d0-4ebc-9f45-67890abcdef0", "name": "Euro", "slug": "euro" },
+        {
+          "id": "d0e1f2a3-b4c5-4d12-8e90-abcdef012345",
+          "name": "Média Duração",
+          "slug": "media-duracao"
+        }
+      ],
+      "images": [],
+      "art": "forest"
+    },
+    {
+      "id": "21a1f6e5-d4c3-4b2a-9e87-234567890abc",
+      "slug": "uno",
+      "name": "Uno",
+      "publisher": "Mattel",
+      "minPlayers": 2,
+      "maxPlayers": 10,
+      "averageDurationMinutes": 20,
+      "minimumAge": 7,
+      "description": "Livre-se das cartas combinando cores ou números antes de todo mundo.",
+      "fullDescription": "Uno é um jogo de cartas rápido em que cada participante deve combinar a carta jogada por cor, número ou símbolo. As cartas de ação mudam o rumo da partida e vence quem descartar todas as cartas da mão primeiro.",
+      "weeklyRentalPriceCents": 1200,
+      "salePriceCents": 3990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": true,
+      "tags": [
+        { "id": "b2c3d4e5-f6a7-4b89-8c12-34567890abcd", "name": "Cartas", "slug": "cartas" },
+        { "id": "f6a7b8c9-d0e1-4fcd-8a56-7890abcdef01", "name": "De Galera", "slug": "de-galera" },
+        {
+          "id": "c9d0e1f2-a3b4-4c01-9d89-0abcdef01234",
+          "name": "Curta Duração",
+          "slug": "curta-duracao"
+        }
+      ],
+      "images": [],
+      "art": "tavern"
+    },
+    {
+      "id": "32b2a7f6-e5d4-4c3b-8f98-34567890abcd",
+      "slug": "war",
+      "name": "War",
+      "publisher": "Grow",
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "averageDurationMinutes": 120,
+      "minimumAge": 10,
+      "description": "Conquiste territórios e complete seu objetivo secreto antes dos adversários.",
+      "fullDescription": "War é um jogo de conquista de territórios em que os participantes movimentam exércitos pelo mapa e enfrentam os adversários com dados. Cada pessoa recebe um objetivo secreto, e a estratégia de ataque e defesa define a partida.",
+      "weeklyRentalPriceCents": 3000,
+      "salePriceCents": 16990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": false,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "d4e5f6a7-b8c9-4dab-8e34-567890abcdef", "name": "Sorte", "slug": "sorte" },
+        {
+          "id": "e1f2a3b4-c5d6-4e23-9fa1-bcdef0123456",
+          "name": "Longa Duração",
+          "slug": "longa-duracao"
+        }
+      ],
+      "images": [],
+      "art": "castle"
+    },
+    {
+      "id": "43c3b8a7-f6e5-4d4c-9a09-4567890abcde",
+      "slug": "banco-imobiliario",
+      "name": "Banco Imobiliário",
+      "publisher": "Estrela",
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "averageDurationMinutes": 120,
+      "minimumAge": 8,
+      "description": "Compre propriedades, cobre aluguéis e administre seu dinheiro para vencer.",
+      "fullDescription": "Banco Imobiliário é um clássico de negociação e administração de dinheiro. Ao percorrer o tabuleiro, os participantes compram propriedades, constroem e recebem aluguéis, buscando acumular mais patrimônio que os demais.",
+      "weeklyRentalPriceCents": 2800,
+      "salePriceCents": 14990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": false,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "d4e5f6a7-b8c9-4dab-8e34-567890abcdef", "name": "Sorte", "slug": "sorte" },
+        { "id": "f6a7b8c9-d0e1-4fcd-8a56-7890abcdef01", "name": "De Galera", "slug": "de-galera" }
+      ],
+      "images": [],
+      "art": "desert"
+    },
+    {
+      "id": "54d4c9b8-a7f6-4e5d-8b10-567890abcdef",
+      "slug": "dixit",
+      "name": "Dixit",
+      "publisher": "Libellud",
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "averageDurationMinutes": 30,
+      "minimumAge": 8,
+      "description": "Dê pistas criativas e encontre a carta certa entre ilustrações cheias de imaginação.",
+      "fullDescription": "Dixit é um jogo de associação de ideias com cartas ilustradas. Em cada rodada, uma pessoa oferece uma pista para sua carta e os demais tentam escolher, entre as próprias cartas, uma que possa confundir os outros sem ser óbvia demais.",
+      "weeklyRentalPriceCents": 2400,
+      "salePriceCents": 17990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": false,
+      "tags": [
+        { "id": "b2c3d4e5-f6a7-4b89-8c12-34567890abcd", "name": "Cartas", "slug": "cartas" },
+        { "id": "f6a7b8c9-d0e1-4fcd-8a56-7890abcdef01", "name": "De Galera", "slug": "de-galera" },
+        {
+          "id": "c9d0e1f2-a3b4-4c01-9d89-0abcdef01234",
+          "name": "Curta Duração",
+          "slug": "curta-duracao"
+        }
+      ],
+      "images": [],
+      "art": "forest"
+    },
+    {
+      "id": "65e5d0c9-b8a7-4f6e-9c21-67890abcdef0",
+      "slug": "terraforming-mars",
+      "name": "Terraforming Mars",
+      "publisher": "FryxGames",
+      "minPlayers": 1,
+      "maxPlayers": 5,
+      "averageDurationMinutes": 120,
+      "minimumAge": 12,
+      "description": "Desenvolva projetos e transforme Marte em um planeta habitável.",
+      "fullDescription": "Em Terraforming Mars, os participantes controlam corporações que investem em projetos para elevar a temperatura, criar oceanos e tornar a atmosfera respirável. Cartas, produção de recursos e posicionamento no mapa compõem a corrida por pontos.",
+      "weeklyRentalPriceCents": 4500,
+      "salePriceCents": 34990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "rented",
+      "featured": false,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "e5f6a7b8-c9d0-4ebc-9f45-67890abcdef0", "name": "Euro", "slug": "euro" },
+        { "id": "a7b8c9d0-e1f2-4aef-9b67-890abcdef012", "name": "Solo", "slug": "solo" },
+        {
+          "id": "e1f2a3b4-c5d6-4e23-9fa1-bcdef0123456",
+          "name": "Longa Duração",
+          "slug": "longa-duracao"
+        }
+      ],
+      "images": [],
+      "art": "space"
+    },
+    {
+      "id": "76f6e1d0-c9b8-4a7f-8d32-7890abcdef01",
+      "slug": "wingspan",
+      "name": "Wingspan",
+      "publisher": "Stonemaier Games",
+      "minPlayers": 1,
+      "maxPlayers": 5,
+      "averageDurationMinutes": 70,
+      "minimumAge": 10,
+      "description": "Atraia aves para seus habitats e monte um motor eficiente de ações.",
+      "fullDescription": "Wingspan é um jogo competitivo de construção de motor em que cada participante desenvolve uma reserva de aves. As cartas ativam ações e combinações nos habitats, enquanto alimento, ovos e objetivos ajudam a definir a pontuação final.",
+      "weeklyRentalPriceCents": 4000,
+      "salePriceCents": 31990,
+      "availableForSale": true,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": true,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "b2c3d4e5-f6a7-4b89-8c12-34567890abcd", "name": "Cartas", "slug": "cartas" },
+        { "id": "e5f6a7b8-c9d0-4ebc-9f45-67890abcdef0", "name": "Euro", "slug": "euro" },
+        { "id": "a7b8c9d0-e1f2-4aef-9b67-890abcdef012", "name": "Solo", "slug": "solo" }
+      ],
+      "images": [],
+      "art": "ocean"
+    },
+    {
+      "id": "87a7f2e1-d0c9-4b8a-9e43-890abcdef012",
+      "slug": "trio",
+      "name": "Trio",
+      "publisher": "Cocktail Games",
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "averageDurationMinutes": 15,
+      "minimumAge": 7,
+      "description": "Memorize cartas e encontre trios de números iguais antes dos adversários.",
+      "fullDescription": "Trio combina memória e dedução em partidas curtas. As cartas ficam nas mãos dos participantes e no centro da mesa; para formar um trio, é preciso revelar três cartas com o mesmo número seguindo as regras de escolha.",
+      "weeklyRentalPriceCents": 1500,
+      "salePriceCents": 6990,
+      "availableForSale": true,
+      "availableForRental": false,
+      "availability": "available",
+      "featured": false,
+      "tags": [
+        { "id": "b2c3d4e5-f6a7-4b89-8c12-34567890abcd", "name": "Cartas", "slug": "cartas" },
+        { "id": "f6a7b8c9-d0e1-4fcd-8a56-7890abcdef01", "name": "De Galera", "slug": "de-galera" },
+        {
+          "id": "c9d0e1f2-a3b4-4c01-9d89-0abcdef01234",
+          "name": "Curta Duração",
+          "slug": "curta-duracao"
+        }
+      ],
+      "images": [],
+      "art": "tavern"
+    },
+    {
+      "id": "98b8a3f2-e1d0-4c9b-8f54-90abcdef0123",
+      "slug": "nekojima",
+      "name": "Nekojima",
+      "publisher": "Hachette Boardgames",
+      "minPlayers": 1,
+      "maxPlayers": 5,
+      "averageDurationMinutes": 15,
+      "minimumAge": 7,
+      "description": "Equilibre postes e fios de energia sem derrubar a delicada ilha de gatos.",
+      "fullDescription": "Nekojima é um jogo de destreza em que postes de madeira e fios devem ser posicionados cuidadosamente entre os distritos da ilha. A partida pode ser competitiva, cooperativa ou solo, sempre com atenção ao equilíbrio da estrutura.",
+      "weeklyRentalPriceCents": 1800,
+      "salePriceCents": 11990,
+      "availableForSale": false,
+      "availableForRental": true,
+      "availability": "available",
+      "featured": false,
+      "tags": [
+        { "id": "a1b2c3d4-e5f6-4a78-9b01-234567890abc", "name": "Tabuleiro", "slug": "tabuleiro" },
+        { "id": "c3d4e5f6-a7b8-4c9a-9d23-4567890abcde", "name": "Destreza", "slug": "destreza" },
+        { "id": "a7b8c9d0-e1f2-4aef-9b67-890abcdef012", "name": "Solo", "slug": "solo" },
+        {
+          "id": "c9d0e1f2-a3b4-4c01-9d89-0abcdef01234",
+          "name": "Curta Duração",
+          "slug": "curta-duracao"
+        }
+      ],
+      "images": [
+        "https://67287.cdn.simplo7.net/static/67287/sku/jogos-de-tabuleiro-e-cardgames-jogo-nekojima-p-1750791649532.jpg"
+      ],
+      "art": "desert"
+    }
+  ],
+  "siteConfig": {
+    "businessName": "Empresa de Jogos - Exemplo",
+    "phone": null,
+    "whatsapp": null,
+    "email": null,
+    "serviceRegion": null,
+    "defaultRentalPeriodDays": 7,
+    "socialLinks": {},
+    "contactMessage": null,
+    "developerCreditName": "Dados do Desenvolvedor — TEMPORÁRIO",
+    "developerCreditUrl": "https://dados-do-desenvolvedor.example.invalid",
+    "logoUrl": "http://localhost:3000/dev-assets/logo.svg?v=inicial",
+    "iconUrl": "http://localhost:3000/dev-assets/ico.svg?v=inicial"
+  },
+  "events": [
+    {
+      "id": "a9c9b4a3-f2e1-4d0c-9a65-abcdef012345",
+      "slug": "noite-de-jogos-rapidos",
+      "title": "Noite de jogos rápidos",
+      "summary": "Uma mesa aberta para descobrir novos jogos.",
+      "description": "Uma mesa aberta para descobrir novos jogos e encontrar parceiros para jogar.",
+      "fullDescription": "A noite começa com uma apresentação dos jogos disponíveis e formação de mesas para todos os níveis de experiência. Chegue alguns minutos antes para escolher uma mesa ou peça ajuda para encontrar um jogo adequado ao seu grupo.",
+      "location": "Salão da Guilda",
+      "startsAt": "2026-08-03T21:00:00.000Z",
+      "endsAt": "2026-08-04T01:00:00.000Z",
+      "featured": true,
+      "coverImageUrl": "/events/noite-de-aventuras.png"
+    },
+    {
+      "id": "bacad5b4-a3f2-4e1d-8b76-bcdef0123456",
+      "slug": "tarde-de-jogos-de-cartas",
+      "title": "Tarde de jogos de cartas",
+      "summary": "Partidas rápidas para quem gosta de blefar, combinar e pontuar.",
+      "description": "Uma tarde descontraída para conhecer jogos de cartas e formar novas mesas.",
+      "fullDescription": "Uma seleção de jogos de cartas para diferentes níveis de experiência, com explicação das regras antes de cada partida. É só chegar, escolher uma mesa e aproveitar a tarde.",
+      "location": "Sala do Mapa",
+      "startsAt": "2026-08-10T18:00:00.000Z",
+      "endsAt": "2026-08-10T22:00:00.000Z",
+      "featured": false,
+      "coverImageUrl": "/events/noite-de-aventuras.png"
+    },
+    {
+      "id": "cbdbe6c5-b4a3-4f2e-9c87-cdef01234567",
+      "slug": "torneio-de-catan",
+      "title": "Torneio de Catan",
+      "summary": "Negociações, rotas e a disputa pelos pontos de vitória.",
+      "description": "Torneio presencial de Catan com rodadas classificatórias e mesa final.",
+      "fullDescription": "O torneio tem rodadas classificatórias e uma mesa final. A inscrição é confirmada diretamente com a loja, e o regulamento completo é compartilhado com as pessoas participantes antes do encontro.",
+      "location": "Salão da Guilda",
+      "startsAt": "2026-08-24T17:00:00.000Z",
+      "endsAt": "2026-08-24T22:00:00.000Z",
+      "featured": false,
+      "coverImageUrl": "/events/noite-de-aventuras.png"
+    }
+  ]
+}
