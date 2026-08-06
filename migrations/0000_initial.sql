@@ -1,16 +1,38 @@
 PRAGMA foreign_keys = ON;
 
+CREATE TABLE users (
+  id TEXT PRIMARY KEY NOT NULL,
+  identity_subject TEXT NOT NULL UNIQUE,
+  email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+  display_name TEXT NOT NULL,
+  phone TEXT,
+  city TEXT,
+  auth_provider TEXT NOT NULL CHECK (auth_provider IN ('cloudflare_access', 'email', 'google', 'apple')),
+  password_hash TEXT,
+  role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('member', 'admin', 'super_admin')),
+  active INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE INDEX users_role_index ON users(role, active);
+CREATE INDEX users_email_index ON users(email);
+
 CREATE TABLE games (
   id TEXT PRIMARY KEY NOT NULL,
   slug TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   publisher TEXT,
+  edition_release_year INTEGER CHECK (edition_release_year IS NULL OR (edition_release_year >= 1800 AND edition_release_year <= 3000)),
   min_players INTEGER CHECK (min_players IS NULL OR min_players > 0),
   max_players INTEGER CHECK (max_players IS NULL OR max_players > 0),
   average_duration_minutes INTEGER CHECK (average_duration_minutes IS NULL OR average_duration_minutes > 0),
   minimum_age INTEGER CHECK (minimum_age IS NULL OR minimum_age >= 0),
   description TEXT,
+  full_description TEXT,
+  sale_price_cents INTEGER CHECK (sale_price_cents IS NULL OR sale_price_cents >= 0),
   weekly_rental_price_cents INTEGER CHECK (weekly_rental_price_cents IS NULL OR weekly_rental_price_cents >= 0),
+  available_for_sale INTEGER NOT NULL DEFAULT 0 CHECK (available_for_sale IN (0, 1)),
+  available_for_rental INTEGER NOT NULL DEFAULT 1 CHECK (available_for_rental IN (0, 1)),
   box_width_mm INTEGER CHECK (box_width_mm IS NULL OR box_width_mm > 0),
   box_height_mm INTEGER CHECK (box_height_mm IS NULL OR box_height_mm > 0),
   box_depth_mm INTEGER CHECK (box_depth_mm IS NULL OR box_depth_mm > 0),
@@ -27,6 +49,8 @@ CREATE TABLE games (
 );
 CREATE INDEX games_public_index ON games(active, published, deleted_at);
 CREATE INDEX games_availability_index ON games(availability);
+CREATE INDEX games_sale_availability_index ON games(available_for_sale);
+CREATE INDEX games_rental_availability_index ON games(available_for_rental);
 CREATE INDEX games_featured_index ON games(featured);
 
 CREATE TABLE tags (
@@ -63,6 +87,7 @@ CREATE TABLE events (
   title TEXT NOT NULL,
   summary TEXT,
   description TEXT NOT NULL,
+  full_description TEXT,
   location TEXT,
   starts_at TEXT NOT NULL,
   ends_at TEXT,
@@ -89,5 +114,9 @@ CREATE TABLE site_config (
   default_rental_period_days INTEGER NOT NULL CHECK (default_rental_period_days > 0),
   social_links_json TEXT NOT NULL,
   contact_message TEXT,
+  developer_credit_name TEXT,
+  developer_credit_url TEXT,
+  logo_object_key TEXT,
+  icon_object_key TEXT,
   updated_at TEXT NOT NULL
 );

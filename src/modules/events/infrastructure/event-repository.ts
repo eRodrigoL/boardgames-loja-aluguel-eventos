@@ -1,7 +1,7 @@
 import { notFound } from '../../../shared/errors/app-error';
 import type { EventInput, EventListQuery } from '../domain/event';
 
-const columns = `id, slug, title, summary, description, location, starts_at as startsAt, ends_at as endsAt,
+const columns = `id, slug, title, summary, description, full_description as fullDescription, location, starts_at as startsAt, ends_at as endsAt,
  contact, cover_image_key as coverImageKey, featured, published, active, deleted_at as deletedAt,
  created_at as createdAt, updated_at as updatedAt`;
 const now = () => new Date().toISOString();
@@ -17,7 +17,7 @@ export class EventRepository {
     const timestamp = now();
     await this.db
       .prepare(
-        'INSERT INTO events (id, slug, title, summary, description, location, starts_at, ends_at, contact, cover_image_key, featured, published, active, deleted_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO events (id, slug, title, summary, description, full_description, location, starts_at, ends_at, contact, cover_image_key, featured, published, active, deleted_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       )
       .bind(
         id,
@@ -25,6 +25,7 @@ export class EventRepository {
         input.title,
         input.summary ?? null,
         input.description,
+        input.fullDescription ?? null,
         input.location ?? null,
         input.startsAt,
         input.endsAt ?? null,
@@ -45,13 +46,14 @@ export class EventRepository {
     const timestamp = now();
     await this.db
       .prepare(
-        'UPDATE events SET slug = ?, title = ?, summary = ?, description = ?, location = ?, starts_at = ?, ends_at = ?, contact = ?, featured = ?, published = ?, active = ?, updated_at = ? WHERE id = ?',
+        'UPDATE events SET slug = ?, title = ?, summary = ?, description = ?, full_description = ?, location = ?, starts_at = ?, ends_at = ?, contact = ?, featured = ?, published = ?, active = ?, updated_at = ? WHERE id = ?',
       )
       .bind(
         input.slug,
         input.title,
         input.summary ?? null,
         input.description,
+        input.fullDescription ?? null,
         input.location ?? null,
         input.startsAt,
         input.endsAt ?? null,

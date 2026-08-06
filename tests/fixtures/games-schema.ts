@@ -1,8 +1,8 @@
 export const gamesSchema = [
   `CREATE TABLE games (
-    id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, publisher TEXT,
+    id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, publisher TEXT, edition_release_year INTEGER,
     min_players INTEGER, max_players INTEGER, average_duration_minutes INTEGER, minimum_age INTEGER,
-    description TEXT, weekly_rental_price_cents INTEGER, box_width_mm INTEGER, box_height_mm INTEGER,
+    description TEXT, full_description TEXT, sale_price_cents INTEGER, weekly_rental_price_cents INTEGER, available_for_sale INTEGER NOT NULL DEFAULT 0, available_for_rental INTEGER NOT NULL DEFAULT 1, box_width_mm INTEGER, box_height_mm INTEGER,
     box_depth_mm INTEGER, box_weight_grams INTEGER, availability TEXT NOT NULL,
     availability_forecast_at TEXT, featured INTEGER NOT NULL, published INTEGER NOT NULL,
     active INTEGER NOT NULL, deleted_at TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL

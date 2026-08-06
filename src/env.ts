@@ -7,6 +7,7 @@ const envSchema = z.object({
   ACCESS_ISSUER: z.string().url(),
   ACCESS_AUDIENCE: z.string().min(1),
   ACCESS_JWKS_URL: z.string().url(),
+  BOOTSTRAP_SUPER_ADMIN_EMAIL: z.string().email().optional(),
   MAX_IMAGE_BYTES: z.coerce
     .number()
     .int()

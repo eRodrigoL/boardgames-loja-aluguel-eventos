@@ -8,6 +8,7 @@ export const eventInputSchema = z
     title: z.string().trim().min(1).max(200),
     summary: optionalText,
     description: z.string().trim().min(1).max(20_000),
+    fullDescription: optionalText,
     location: optionalText,
     startsAt: isoDateSchema,
     endsAt: isoDateSchema.nullable().optional(),

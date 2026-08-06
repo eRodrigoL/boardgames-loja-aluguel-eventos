@@ -6,6 +6,9 @@ import { data } from '../../../shared/http/response';
 import { idSchema, parseOrThrow } from '../../../shared/validation/common';
 import { GameRepository } from '../../games/infrastructure/game-repository';
 import { EventRepository } from '../../events/infrastructure/event-repository';
+import { siteBrandAssetSchema } from '../../site-config/domain/site-config';
+import { SiteConfigRepository } from '../../site-config/infrastructure/site-config-repository';
+import { toPublicSiteConfig } from '../../site-config/presentation/site-config-response';
 
 const supportedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
@@ -21,6 +24,20 @@ export function detectImageType(bytes: Uint8Array): string | undefined {
   )
     return 'image/webp';
   return undefined;
+}
+
+export function isSafeSvg(bytes: Uint8Array): boolean {
+  let source: string;
+  try {
+    source = new TextDecoder('utf-8', { fatal: true, ignoreBOM: false }).decode(bytes).trimStart();
+  } catch {
+    return false;
+  }
+  if (!/^(?:<\?xml[^>]*\?>\s*)?<svg(?:\s|>)/i.test(source)) return false;
+
+  return !/(?:<!doctype|<!entity|<\/?(?:script|foreignobject|iframe|object|embed|image|style|animate(?:motion|transform)?|set)\b|\son[a-z]+\s*=|(?:href|xlink:href)\s*=\s*['"]?\s*(?:javascript:|https?:|\/\/))/i.test(
+    source,
+  );
 }
 
 export function publicMediaRoutes() {
@@ -48,6 +65,21 @@ export function publicMediaRoutes() {
     return new Response(object.body, {
       headers: {
         'Content-Type': object.httpMetadata?.contentType ?? 'application/octet-stream',
+        'Cache-Control': 'public, max-age=3600',
+        ETag: object.httpEtag,
+      },
+    });
+  });
+  app.get('/site-brand/:asset', async (c) => {
+    const asset = parseOrThrow(siteBrandAssetSchema, c.req.param('asset'));
+    const config = await new SiteConfigRepository(c.env.DB).get();
+    const objectKey = asset === 'logo' ? config.logoObjectKey : config.iconObjectKey;
+    if (!objectKey) throw notFound('Site brand asset');
+    const object = await c.env.MEDIA.get(objectKey);
+    if (!object) throw notFound('Site brand asset');
+    return new Response(object.body, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
         'Cache-Control': 'public, max-age=3600',
         ETag: object.httpEtag,
       },
@@ -177,6 +209,54 @@ export function adminMediaRoutes() {
     }
     await repository.setCoverImage(eventId, null);
     return c.body(null, 204);
+  });
+  app.post('/config/public/:asset', async (c) => {
+    const asset = parseOrThrow(siteBrandAssetSchema, c.req.param('asset'));
+    const form = await c.req.formData();
+    const candidate = form.get('file');
+    if (!(candidate instanceof File))
+      throw new AppError('VALIDATION_ERROR', 400, 'A file is required.', [{ path: ['file'] }]);
+    if (candidate.type !== 'image/svg+xml')
+      throw new AppError('INVALID_IMAGE_MIME_TYPE', 422, 'Only SVG files are allowed.');
+    if (candidate.size === 0 || candidate.size > getEnv(c.env).MAX_IMAGE_BYTES)
+      throw new AppError('IMAGE_TOO_LARGE', 422, 'The image exceeds the allowed size.');
+
+    const content = await candidate.arrayBuffer();
+    if (!isSafeSvg(new Uint8Array(content)))
+      throw new AppError('INVALID_IMAGE_FORMAT', 422, 'The file content is not a safe SVG image.');
+
+    const repository = new SiteConfigRepository(c.env.DB);
+    const previous = await repository.get();
+    const previousObjectKey = asset === 'logo' ? previous.logoObjectKey : previous.iconObjectKey;
+    const objectKey = `site-config/${asset}/${crypto.randomUUID()}.svg`;
+    await c.env.MEDIA.put(objectKey, content, {
+      httpMetadata: { contentType: 'image/svg+xml' },
+    });
+    try {
+      const config = await repository.setBrandAsset(asset, objectKey);
+      if (previousObjectKey) await c.env.MEDIA.delete(previousObjectKey).catch(() => undefined);
+      return data(c, toPublicSiteConfig(c.req.url, config), 201);
+    } catch (error) {
+      await c.env.MEDIA.delete(objectKey).catch(() => undefined);
+      throw error;
+    }
+  });
+  app.delete('/config/public/:asset', async (c) => {
+    const asset = parseOrThrow(siteBrandAssetSchema, c.req.param('asset'));
+    const repository = new SiteConfigRepository(c.env.DB);
+    const config = await repository.get();
+    const objectKey = asset === 'logo' ? config.logoObjectKey : config.iconObjectKey;
+    if (!objectKey) throw notFound('Site brand asset');
+    try {
+      await c.env.MEDIA.delete(objectKey);
+    } catch {
+      throw new AppError(
+        'MEDIA_DELETE_FAILED',
+        502,
+        'The site brand asset could not be removed safely.',
+      );
+    }
+    return data(c, toPublicSiteConfig(c.req.url, await repository.setBrandAsset(asset, null)));
   });
   return app;
 }

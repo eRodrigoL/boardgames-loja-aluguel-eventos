@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import type { Env } from './env';
 import { getEnv } from './env';
 import {
   eventFlagSchema,
@@ -17,6 +16,18 @@ import { GameRepository } from './modules/games/infrastructure/game-repository';
 import { adminMediaRoutes, publicMediaRoutes } from './modules/media/presentation/media-routes';
 import { siteConfigSchema } from './modules/site-config/domain/site-config';
 import { SiteConfigRepository } from './modules/site-config/infrastructure/site-config-repository';
+import { toPublicSiteConfig } from './modules/site-config/presentation/site-config-response';
+import {
+  userProfileSchema,
+  userRoleInputSchema,
+  userSearchQuerySchema,
+} from './modules/users/domain/user';
+import { UserRepository } from './modules/users/infrastructure/user-repository';
+import {
+  loadCurrentUser,
+  requireRole,
+  type UserAccessEnvironment,
+} from './modules/users/presentation/user-middleware';
 import { AppError } from './shared/errors/app-error';
 import { restrictedCors } from './shared/http/cors';
 import { data, paginated } from './shared/http/response';
@@ -30,7 +41,7 @@ function bodyOrThrow(c: { req: { json: () => Promise<unknown> } }) {
 }
 
 export function createApp() {
-  const app = new Hono<{ Bindings: Env }>();
+  const app = new Hono<UserAccessEnvironment>();
   app.use('*', async (c, next) => {
     getEnv(c.env);
     await next();
@@ -109,11 +120,43 @@ export function createApp() {
     ),
   );
   app.get('/api/config/public', async (c) =>
-    data(c, await new SiteConfigRepository(c.env.DB).get()),
+    data(c, toPublicSiteConfig(c.req.url, await new SiteConfigRepository(c.env.DB).get())),
   );
   app.route('/api/media', publicMediaRoutes());
 
-  app.use('/api/admin/*', accessMiddleware);
+  app.get('/api/account/me', accessMiddleware, loadCurrentUser, (c) =>
+    data(c, c.get('currentUser')),
+  );
+  app.patch('/api/account/me', accessMiddleware, loadCurrentUser, async (c) =>
+    data(
+      c,
+      await new UserRepository(c.env.DB).updateProfile(
+        c.get('currentUser').id,
+        parseOrThrow(userProfileSchema, await bodyOrThrow(c)),
+      ),
+    ),
+  );
+
+  app.use('/api/admin/*', accessMiddleware, loadCurrentUser, requireRole('admin'));
+  app.use('/api/admin/config/public/*', requireRole('super_admin'));
+  app.get('/api/admin/users', requireRole('super_admin'), async (c) =>
+    data(
+      c,
+      await new UserRepository(c.env.DB).search(
+        parseOrThrow(userSearchQuerySchema, c.req.query()).query,
+      ),
+    ),
+  );
+  app.patch('/api/admin/users/:id/role', requireRole('super_admin'), async (c) =>
+    data(
+      c,
+      await new UserRepository(c.env.DB).updateRole(
+        c.get('currentUser'),
+        parseOrThrow(idSchema, c.req.param('id')),
+        parseOrThrow(userRoleInputSchema, await bodyOrThrow(c)).role,
+      ),
+    ),
+  );
   app.get('/api/admin/games', async (c) => {
     const query = parseOrThrow(gameListQuerySchema, c.req.query());
     const result = await new GameRepository(c.env.DB).list(query, true);
@@ -180,8 +223,6 @@ export function createApp() {
     await new GameRepository(c.env.DB).softDelete(parseOrThrow(idSchema, c.req.param('id')));
     return c.body(null, 204);
   });
-  app.route('/api/admin', adminMediaRoutes());
-
   app.get('/api/admin/events', async (c) => {
     const query = parseOrThrow(eventListQuerySchema, c.req.query());
     const result = await new EventRepository(c.env.DB).list(query, true);
@@ -238,16 +279,20 @@ export function createApp() {
     return c.body(null, 204);
   });
 
-  app.get('/api/admin/config/public', async (c) =>
-    data(c, await new SiteConfigRepository(c.env.DB).get()),
+  app.get('/api/admin/config/public', requireRole('super_admin'), async (c) =>
+    data(c, toPublicSiteConfig(c.req.url, await new SiteConfigRepository(c.env.DB).get())),
   );
-  app.put('/api/admin/config/public', async (c) =>
+  app.put('/api/admin/config/public', requireRole('super_admin'), async (c) =>
     data(
       c,
-      await new SiteConfigRepository(c.env.DB).save(
-        parseOrThrow(siteConfigSchema, await bodyOrThrow(c)),
+      toPublicSiteConfig(
+        c.req.url,
+        await new SiteConfigRepository(c.env.DB).save(
+          parseOrThrow(siteConfigSchema, await bodyOrThrow(c)),
+        ),
       ),
     ),
   );
+  app.route('/api/admin', adminMediaRoutes());
   return app;
 }

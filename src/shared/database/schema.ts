@@ -12,6 +12,29 @@ const timestamps = {
   updatedAt: text('updated_at').notNull(),
 };
 
+export const users = sqliteTable(
+  'users',
+  {
+    id: text('id').primaryKey(),
+    identitySubject: text('identity_subject').notNull(),
+    email: text('email').notNull(),
+    displayName: text('display_name').notNull(),
+    phone: text('phone'),
+    city: text('city'),
+    authProvider: text('auth_provider').notNull(),
+    passwordHash: text('password_hash'),
+    role: text('role').notNull().default('member'),
+    active: integer('active', { mode: 'boolean' }).notNull().default(true),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex('users_identity_subject_unique').on(table.identitySubject),
+    uniqueIndex('users_email_unique').on(table.email),
+    index('users_role_index').on(table.role, table.active),
+    index('users_email_index').on(table.email),
+  ],
+);
+
 export const games = sqliteTable(
   'games',
   {
@@ -19,12 +42,19 @@ export const games = sqliteTable(
     slug: text('slug').notNull(),
     name: text('name').notNull(),
     publisher: text('publisher'),
+    editionReleaseYear: integer('edition_release_year'),
     minPlayers: integer('min_players'),
     maxPlayers: integer('max_players'),
     averageDurationMinutes: integer('average_duration_minutes'),
     minimumAge: integer('minimum_age'),
     description: text('description'),
+    fullDescription: text('full_description'),
+    salePriceCents: integer('sale_price_cents'),
     weeklyRentalPriceCents: integer('weekly_rental_price_cents'),
+    availableForSale: integer('available_for_sale', { mode: 'boolean' }).notNull().default(false),
+    availableForRental: integer('available_for_rental', { mode: 'boolean' })
+      .notNull()
+      .default(true),
     boxWidthMm: integer('box_width_mm'),
     boxHeightMm: integer('box_height_mm'),
     boxDepthMm: integer('box_depth_mm'),
@@ -41,6 +71,8 @@ export const games = sqliteTable(
     uniqueIndex('games_slug_unique').on(table.slug),
     index('games_public_index').on(table.active, table.published, table.deletedAt),
     index('games_availability_index').on(table.availability),
+    index('games_sale_availability_index').on(table.availableForSale),
+    index('games_rental_availability_index').on(table.availableForRental),
     index('games_featured_index').on(table.featured),
   ],
 );
@@ -95,6 +127,7 @@ export const events = sqliteTable(
     title: text('title').notNull(),
     summary: text('summary'),
     description: text('description').notNull(),
+    fullDescription: text('full_description'),
     location: text('location'),
     startsAt: text('starts_at').notNull(),
     endsAt: text('ends_at'),
@@ -123,5 +156,9 @@ export const siteConfig = sqliteTable('site_config', {
   defaultRentalPeriodDays: integer('default_rental_period_days').notNull(),
   socialLinksJson: text('social_links_json').notNull(),
   contactMessage: text('contact_message'),
+  developerCreditName: text('developer_credit_name'),
+  developerCreditUrl: text('developer_credit_url'),
+  logoObjectKey: text('logo_object_key'),
+  iconObjectKey: text('icon_object_key'),
   updatedAt: text('updated_at').notNull(),
 });

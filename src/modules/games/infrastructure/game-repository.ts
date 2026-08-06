@@ -19,9 +19,10 @@ type ImageRow = {
 };
 type TagRow = { id: string; name: string; slug: string };
 
-const columns = `id, slug, name, publisher, min_players as minPlayers, max_players as maxPlayers,
- average_duration_minutes as averageDurationMinutes, minimum_age as minimumAge, description,
- weekly_rental_price_cents as weeklyRentalPriceCents, box_width_mm as boxWidthMm,
+const columns = `id, slug, name, publisher, edition_release_year as editionReleaseYear, min_players as minPlayers, max_players as maxPlayers,
+ average_duration_minutes as averageDurationMinutes, minimum_age as minimumAge, description, full_description as fullDescription,
+ sale_price_cents as salePriceCents, weekly_rental_price_cents as weeklyRentalPriceCents,
+ available_for_sale as availableForSale, available_for_rental as availableForRental, box_width_mm as boxWidthMm,
  box_height_mm as boxHeightMm, box_depth_mm as boxDepthMm, box_weight_grams as boxWeightGrams,
  availability, availability_forecast_at as availabilityForecastAt, featured, published, active,
  deleted_at as deletedAt, created_at as createdAt, updated_at as updatedAt`;
@@ -43,19 +44,24 @@ export class GameRepository {
     const timestamp = now();
     await this.db
       .prepare(
-        `INSERT INTO games (${columns.replaceAll(/\s+as\s+\w+/g, '').replaceAll(/\s+/g, ' ')}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO games (id, slug, name, publisher, edition_release_year, min_players, max_players, average_duration_minutes, minimum_age, description, full_description, sale_price_cents, weekly_rental_price_cents, available_for_sale, available_for_rental, box_width_mm, box_height_mm, box_depth_mm, box_weight_grams, availability, availability_forecast_at, featured, published, active, deleted_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .bind(
         id,
         input.slug,
         input.name,
         input.publisher ?? null,
+        input.editionReleaseYear ?? null,
         input.minPlayers ?? null,
         input.maxPlayers ?? null,
         input.averageDurationMinutes ?? null,
         input.minimumAge ?? null,
         input.description ?? null,
+        input.fullDescription ?? null,
+        input.salePriceCents ?? null,
         input.weeklyRentalPriceCents ?? null,
+        Number(input.availableForSale),
+        Number(input.availableForRental),
         input.boxWidthMm ?? null,
         input.boxHeightMm ?? null,
         input.boxDepthMm ?? null,
@@ -79,18 +85,23 @@ export class GameRepository {
     const timestamp = now();
     await this.db
       .prepare(
-        `UPDATE games SET slug = ?, name = ?, publisher = ?, min_players = ?, max_players = ?, average_duration_minutes = ?, minimum_age = ?, description = ?, weekly_rental_price_cents = ?, box_width_mm = ?, box_height_mm = ?, box_depth_mm = ?, box_weight_grams = ?, availability = ?, availability_forecast_at = ?, featured = ?, published = ?, active = ?, updated_at = ? WHERE id = ?`,
+        `UPDATE games SET slug = ?, name = ?, publisher = ?, edition_release_year = ?, min_players = ?, max_players = ?, average_duration_minutes = ?, minimum_age = ?, description = ?, full_description = ?, sale_price_cents = ?, weekly_rental_price_cents = ?, available_for_sale = ?, available_for_rental = ?, box_width_mm = ?, box_height_mm = ?, box_depth_mm = ?, box_weight_grams = ?, availability = ?, availability_forecast_at = ?, featured = ?, published = ?, active = ?, updated_at = ? WHERE id = ?`,
       )
       .bind(
         input.slug,
         input.name,
         input.publisher ?? null,
+        input.editionReleaseYear ?? null,
         input.minPlayers ?? null,
         input.maxPlayers ?? null,
         input.averageDurationMinutes ?? null,
         input.minimumAge ?? null,
         input.description ?? null,
+        input.fullDescription ?? null,
+        input.salePriceCents ?? null,
         input.weeklyRentalPriceCents ?? null,
+        Number(input.availableForSale),
+        Number(input.availableForRental),
         input.boxWidthMm ?? null,
         input.boxHeightMm ?? null,
         input.boxDepthMm ?? null,
@@ -194,6 +205,8 @@ export class GameRepository {
       conditions.push('availability = ?');
       values.push(query.availability);
     }
+    if (query.fulfillment === 'sale') conditions.push('available_for_sale = 1');
+    if (query.fulfillment === 'rental') conditions.push('available_for_rental = 1');
     if (query.featured !== undefined) {
       conditions.push('featured = ?');
       values.push(Number(query.featured));
@@ -383,6 +396,8 @@ export class GameRepository {
     return {
       ...row,
       featured: Boolean(row.featured),
+      availableForSale: Boolean(row.availableForSale),
+      availableForRental: Boolean(row.availableForRental),
       published: Boolean(row.published),
       active: Boolean(row.active),
       images: imageResult.results.map((image) => ({ ...image, url: imageUrl(image.id) })),
