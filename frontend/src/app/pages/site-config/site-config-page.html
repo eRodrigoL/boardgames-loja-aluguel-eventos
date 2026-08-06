@@ -1,0 +1,204 @@
+<section class="profile-form-page section-shell site-config-page">
+  <a class="back-link" routerLink="/">← Voltar à loja</a>
+  <form class="admin-form site-config-form" (ngSubmit)="save()">
+    <p class="section-kicker">Acesso total</p>
+    <h1>Configurações do site</h1>
+    <p>
+      Estes dados são públicos. Preencha somente as informações que devem aparecer para visitantes.
+    </p>
+
+    <section class="brand-assets" aria-labelledby="brand-assets-title">
+      <div class="brand-assets__heading">
+        <p class="section-kicker">Identidade visual</p>
+        <h2 id="brand-assets-title">Logo e ícone do navegador</h2>
+        <p>Envie apenas arquivos SVG. Eles ficam armazenados com as configurações do site.</p>
+      </div>
+      <div class="brand-assets__grid">
+        <article class="brand-asset-card">
+          <div class="brand-asset-card__preview" aria-label="Prévia do logo">
+            @if (config()?.logoUrl; as logoUrl) {
+              <img [src]="logoUrl" alt="Logo atual" />
+            } @else {
+              <span>Sem logo</span>
+            }
+          </div>
+          <div>
+            <h3>Logo do site</h3>
+            <p>Exibido no cabeçalho e no rodapé.</p>
+            <label class="button button--outline-dark brand-asset-card__upload">
+              {{ uploadingAsset() === 'logo' ? 'Enviando...' : 'Enviar SVG' }}
+              <input
+                type="file"
+                accept="image/svg+xml,.svg"
+                [disabled]="uploadingAsset() !== null"
+                (change)="uploadBrandAsset('logo', $event)"
+              />
+            </label>
+            @if (config()?.logoUrl) {
+              <button
+                class="text-button"
+                type="button"
+                [disabled]="uploadingAsset() !== null"
+                (click)="removeBrandAsset('logo')"
+              >
+                Remover logo
+              </button>
+            }
+          </div>
+        </article>
+        <article class="brand-asset-card">
+          <div
+            class="brand-asset-card__preview brand-asset-card__preview--icon"
+            aria-label="Prévia do ícone"
+          >
+            @if (config()?.iconUrl; as iconUrl) {
+              <img [src]="iconUrl" alt="Ícone atual" />
+            } @else {
+              <span>Sem ícone</span>
+            }
+          </div>
+          <div>
+            <h3>Ícone do navegador</h3>
+            <p>Usado na aba e nos favoritos do navegador.</p>
+            <label class="button button--outline-dark brand-asset-card__upload">
+              {{ uploadingAsset() === 'icon' ? 'Enviando...' : 'Enviar SVG' }}
+              <input
+                type="file"
+                accept="image/svg+xml,.svg"
+                [disabled]="uploadingAsset() !== null"
+                (change)="uploadBrandAsset('icon', $event)"
+              />
+            </label>
+            @if (config()?.iconUrl) {
+              <button
+                class="text-button"
+                type="button"
+                [disabled]="uploadingAsset() !== null"
+                (click)="removeBrandAsset('icon')"
+              >
+                Remover ícone
+              </button>
+            }
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <label class="form-field"
+      >Nome do negócio<input
+        required
+        maxlength="200"
+        [ngModel]="draft().businessName"
+        (ngModelChange)="update('businessName', $event)"
+        name="businessName"
+    /></label>
+    <div class="form-grid">
+      <label class="form-field"
+        >Telefone<input
+          maxlength="50"
+          [ngModel]="draft().phone"
+          (ngModelChange)="update('phone', $event)"
+          name="phone"
+      /></label>
+      <label class="form-field"
+        >WhatsApp (somente números)<input
+          maxlength="50"
+          inputmode="numeric"
+          [ngModel]="draft().whatsapp"
+          (ngModelChange)="update('whatsapp', $event)"
+          name="whatsapp"
+      /></label>
+      <label class="form-field"
+        >E-mail público<input
+          type="email"
+          maxlength="254"
+          [ngModel]="draft().email"
+          (ngModelChange)="update('email', $event)"
+          name="email"
+      /></label>
+      <label class="form-field"
+        >Região atendida<input
+          maxlength="300"
+          [ngModel]="draft().serviceRegion"
+          (ngModelChange)="update('serviceRegion', $event)"
+          name="serviceRegion"
+      /></label>
+      <label class="form-field"
+        >Período padrão de locação (dias)<input
+          type="number"
+          min="1"
+          max="365"
+          [ngModel]="draft().defaultRentalPeriodDays"
+          (ngModelChange)="update('defaultRentalPeriodDays', $event)"
+          name="defaultRentalPeriodDays"
+      /></label>
+      <label class="form-field"
+        >URL do site<input
+          type="url"
+          maxlength="500"
+          placeholder="https://www.exemplo.com"
+          [ngModel]="draft().websiteUrl"
+          (ngModelChange)="update('websiteUrl', $event)"
+          name="websiteUrl"
+      /></label>
+      <label class="form-field"
+        >URL do Instagram<input
+          type="url"
+          maxlength="500"
+          placeholder="https://www.instagram.com/..."
+          [ngModel]="draft().instagramUrl"
+          (ngModelChange)="update('instagramUrl', $event)"
+          name="instagramUrl"
+      /></label>
+      <label class="form-field"
+        >URL do Facebook<input
+          type="url"
+          maxlength="500"
+          placeholder="https://www.facebook.com/..."
+          [ngModel]="draft().facebookUrl"
+          (ngModelChange)="update('facebookUrl', $event)"
+          name="facebookUrl"
+      /></label>
+      <label class="form-field"
+        >URL do YouTube<input
+          type="url"
+          maxlength="500"
+          placeholder="https://www.youtube.com/..."
+          [ngModel]="draft().youtubeUrl"
+          (ngModelChange)="update('youtubeUrl', $event)"
+          name="youtubeUrl"
+      /></label>
+      <label class="form-field"
+        >URL do TikTok<input
+          type="url"
+          maxlength="500"
+          placeholder="https://www.tiktok.com/..."
+          [ngModel]="draft().tiktokUrl"
+          (ngModelChange)="update('tiktokUrl', $event)"
+          name="tiktokUrl"
+      /></label>
+    </div>
+    <label class="form-field"
+      >Mensagem de contato<textarea
+        rows="4"
+        maxlength="2000"
+        [ngModel]="draft().contactMessage"
+        (ngModelChange)="update('contactMessage', $event)"
+        name="contactMessage"
+      ></textarea>
+    </label>
+
+    @if (error()) {
+      <p class="form-error">{{ error() }}</p>
+    }
+    @if (success()) {
+      <p class="form-success">{{ success() }}</p>
+    }
+    <div class="form-actions">
+      <a class="button button--outline-dark" routerLink="/">Cancelar</a>
+      <button class="button button--primary" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Salvando...' : 'Salvar configurações' }}
+      </button>
+    </div>
+  </form>
+</section>

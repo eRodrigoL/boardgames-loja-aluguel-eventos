@@ -1,1 +1,114 @@
-<p>header works!</p>
+<header class="site-header">
+  <div class="header-shell">
+    <a
+      class="brand"
+      routerLink="/"
+      [attr.aria-label]="
+        (siteConfig.config()?.businessName ?? 'Página inicial') + ' — página inicial'
+      "
+      (click)="closeMenu()"
+    >
+      @if (siteConfig.config()?.logoUrl; as logoUrl) {
+        <img class="brand-logo" [src]="logoUrl" alt="" aria-hidden="true" />
+      }
+      <span class="brand-name">{{ siteConfig.config()?.businessName ?? 'Aluguel de jogos' }}</span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-controls="primary-navigation"
+      [attr.aria-label]="isMenuOpen() ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
+      (click)="toggleMenu()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav
+      id="primary-navigation"
+      class="main-nav"
+      [class.is-open]="isMenuOpen()"
+      aria-label="Navegação principal"
+    >
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeMenu()"
+        >Loja</a
+      >
+      <a routerLink="/eventos" routerLinkActive="active" (click)="closeMenu()">Eventos</a>
+    </nav>
+
+    <div class="header-actions">
+      <button
+        class="cart-button"
+        type="button"
+        aria-label="Abrir carrinho de locação"
+        (click)="cartDrawer.open()"
+      >
+        <span class="cart-button__icon" aria-hidden="true">🛒</span>
+        @if (rentalCart.count()) {
+          <span class="cart-button__count">{{ rentalCart.count() }}</span>
+        }
+      </button>
+      @if (auth.user(); as user) {
+        <div class="user-menu">
+          <button
+            class="login-button"
+            type="button"
+            [attr.aria-expanded]="isUserMenuOpen()"
+            aria-controls="user-account-menu"
+            (click)="toggleUserMenu()"
+          >
+            {{ user.name }} <span aria-hidden="true">⌄</span>
+          </button>
+          @if (isUserMenuOpen()) {
+            <div id="user-account-menu" class="account-menu" role="menu">
+              <a
+                class="account-menu__identity"
+                routerLink="/perfil"
+                role="menuitem"
+                (click)="closeUserMenu()"
+              >
+                <strong>{{ user.name }}</strong
+                ><span>{{ user.email }}</span>
+              </a>
+              <a routerLink="/perfil/editar" role="menuitem" (click)="closeUserMenu()"
+                >Editar perfil</a
+              >
+              @if (user.provider === 'email') {
+                <a routerLink="/perfil/senha" role="menuitem" (click)="closeUserMenu()"
+                  >Alterar senha</a
+                >
+              }
+              @if (auth.isSuperAdmin()) {
+                <a
+                  class="account-menu__site-config"
+                  routerLink="/admin/configuracoes"
+                  role="menuitem"
+                  (click)="closeUserMenu()"
+                  >Configurações do site</a
+                >
+                <a routerLink="/admin/usuarios" role="menuitem" (click)="closeUserMenu()"
+                  >Alterar privilégios</a
+                >
+              }
+              <button
+                type="button"
+                role="menuitem"
+                class="account-menu__sign-out"
+                (click)="signOut()"
+              >
+                Sair
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a class="login-button" routerLink="/entrar">Entrar</a>
+      }
+    </div>
+  </div>
+</header>

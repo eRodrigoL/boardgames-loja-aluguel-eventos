@@ -1,0 +1,36 @@
+<section class="profile-form-page section-shell">
+  <a class="back-link" routerLink="/">← Voltar à loja</a>
+  <div class="user-access-page">
+    <p class="section-kicker">Acesso total</p>
+    <h1>Privilégios de usuários</h1>
+    <p>
+      Busque uma conta e defina o nível de acesso adequado. Somente contas com acesso total veem
+      esta área.
+    </p>
+    <label class="search-field"
+      ><span aria-hidden="true">⌕</span
+      ><input
+        type="search"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        placeholder="Buscar por nome ou e-mail"
+    /></label>
+    <div class="user-access-list">
+      @for (user of users(); track user.email) {
+        <article>
+          <div>
+            <strong>{{ user.name }}</strong
+            ><span>{{ user.email }}</span>
+          </div>
+          <select [ngModel]="user.role" (ngModelChange)="updateRole(user.email, $event)">
+            @for (role of roles; track role.value) {
+              <option [value]="role.value">{{ role.label }}</option>
+            }
+          </select>
+        </article>
+      } @empty {
+        <p class="empty-list">Nenhuma conta corresponde à busca.</p>
+      }
+    </div>
+  </div>
+</section>

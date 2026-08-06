@@ -1,0 +1,244 @@
+<section class="page-hero page-hero--catalog">
+  <div class="section-shell catalog-hero-shell">
+    @if (activeHighlight(); as highlight) {
+      <div class="catalog-hero-copy">
+        <p class="eyebrow">
+          <span>✦</span> {{ highlight.kind === 'game' ? 'Destaque do acervo' : 'Próximo encontro' }}
+        </p>
+        @if (highlight.kind === 'game') {
+          <h1>{{ highlight.item.name }}<br /><em>está na mesa.</em></h1>
+          <p>{{ highlight.item.description }}</p>
+          <a class="button button--primary" href="#acervo"
+            >Ver no acervo <span aria-hidden="true">→</span></a
+          >
+        } @else {
+          <h1>{{ highlight.item.title }}<br /><em>vem jogar junto.</em></h1>
+          <p>{{ highlight.item.summary ?? highlight.item.description }}</p>
+          <a class="button button--primary" routerLink="/eventos"
+            >Ver evento <span aria-hidden="true">→</span></a
+          >
+        }
+      </div>
+      <div class="highlight-carousel" aria-label="Destaques de jogos e eventos">
+        <button
+          type="button"
+          class="carousel-arrow"
+          aria-label="Destaque anterior"
+          (click)="showPreviousHighlight()"
+        >
+          ←
+        </button>
+        <div
+          class="highlight-carousel__card"
+          [class.highlight-carousel__card--event]="highlight.kind === 'event'"
+        >
+          <span class="highlight-carousel__label">{{
+            highlight.kind === 'game' ? 'Jogo em destaque' : 'Evento em destaque'
+          }}</span>
+          @if (highlight.kind === 'game') {
+            <strong>{{ gamePlayers(highlight.item) }}</strong>
+            <span
+              >{{ gameDuration(highlight.item) }} ·
+              {{
+                highlight.item.availability === 'available'
+                  ? 'Disponível'
+                  : 'Consulte a disponibilidade'
+              }}</span
+            >
+          } @else {
+            <strong
+              >{{ eventDate(highlight.item).day }} {{ eventDate(highlight.item).month }}</strong
+            >
+            <span
+              >{{ eventDate(highlight.item).time }} ·
+              {{ highlight.item.location ?? 'Local a confirmar' }}</span
+            >
+          }
+        </div>
+        <button
+          type="button"
+          class="carousel-arrow"
+          aria-label="Próximo destaque"
+          (click)="showNextHighlight()"
+        >
+          →
+        </button>
+        <div class="carousel-dots" role="tablist" aria-label="Escolher destaque">
+          @for (
+            highlight of highlights();
+            track highlight.kind + highlight.item.id;
+            let index = $index
+          ) {
+            <button
+              type="button"
+              [class.is-active]="selectedHighlight() === index"
+              [attr.aria-label]="'Ver destaque ' + (index + 1)"
+              (click)="selectHighlight(index)"
+            ></button>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="catalog-hero-copy">
+        <p class="eyebrow"><span>✦</span> O acervo da guilda</p>
+        <h1>Encontre a mesa<br /><em>que chama por você.</em></h1>
+        <p>
+          Explore jogos para tardes tranquilas, noites épicas e toda aventura entre uma e outra.
+        </p>
+      </div>
+    }
+  </div>
+</section>
+
+<section id="acervo" class="catalog-section section-shell">
+  <div class="catalog-controls">
+    <label class="search-field"
+      ><span aria-hidden="true">⌕</span
+      ><input
+        type="search"
+        aria-label="Procurar no acervo"
+        placeholder="Procurar por jogo, editora ou tema"
+        [value]="search()"
+        (input)="updateSearch($event)"
+    /></label>
+  </div>
+  <div class="filter-row" aria-label="Filtrar acervo por categoria">
+    @for (tag of tags(); track tag) {
+      <button type="button" [class.is-selected]="selectedTag() === tag" (click)="selectTag(tag)">
+        {{ tag }}
+      </button>
+    }
+  </div>
+  <div class="catalog-summary">
+    <p>
+      <strong>{{ filteredGames().length }}</strong> jogos encontrados
+    </p>
+    <span>{{
+      selectedShopFilter() === 'sale'
+        ? 'Compra de jogos'
+        : selectedShopFilter() === 'rental'
+          ? 'Locação por uma semana'
+          : 'Compra e locação'
+    }}</span>
+  </div>
+  <div class="catalog-board">
+    <div class="meeple-board" aria-label="Escolher tipo de jogo">
+      <div class="meeple-board__spaces">
+        @for (filter of shopFilters; track filter.key) {
+          <button
+            type="button"
+            [class.is-active]="selectedShopFilter() === filter.key"
+            (click)="selectShopFilter(filter.key)"
+          >
+            <span class="meeple-space" aria-hidden="true"
+              ><span class="meeple" [class.is-visible]="selectedShopFilter() === filter.key"
+                >♟</span
+              ></span
+            >
+            <span class="meeple-label">{{ filter.label }}</span>
+          </button>
+        }
+      </div>
+    </div>
+    @if (filteredGames().length) {
+      <div class="game-grid game-grid--board">
+        @if (auth.isAdmin()) {
+          <a class="game-card game-card--add" routerLink="/admin/jogos/novo">
+            <span aria-hidden="true">+</span>
+            <strong>Adicionar jogo</strong>
+            <small>Inclua um novo jogo no acervo.</small>
+          </a>
+        }
+        @for (game of filteredGames(); track game.id) {
+          <article class="game-card game-card--catalog">
+            <a [class]="'game-art game-art--' + gameArt(game)" [routerLink]="['/jogos', game.slug]">
+              @if (game.images[0]; as image) {
+                <img
+                  class="game-art__image"
+                  [src]="image.url"
+                  [alt]="image.altText ?? 'Capa de ' + game.name"
+                />
+              }
+              <span class="game-art__badge">{{ game.tags[0]?.name ?? 'Acervo' }}</span>
+              @if (!game.images.length) {
+                <span class="game-art__sigil" aria-hidden="true">✦</span>
+              }
+              <span class="game-art__title">{{ game.name }}</span>
+            </a>
+            <div class="game-card__body">
+              <div class="game-card__topline">
+                <p class="game-card__meta">
+                  {{ gamePlayers(game) }} <span>•</span> {{ gameDuration(game) }}
+                </p>
+              </div>
+              <h2>
+                <a [routerLink]="['/jogos', game.slug]">{{ game.name }}</a>
+              </h2>
+              <p>{{ game.description }}</p>
+              <div class="game-card__footer">
+                <span>{{ game.publisher ?? 'Editora a confirmar' }}</span>
+                <button
+                  class="favorite-button"
+                  type="button"
+                  [class.is-selected]="isFavorite(game)"
+                  [attr.aria-label]="
+                    isFavorite(game)
+                      ? 'Remover ' + game.name + ' dos favoritos'
+                      : 'Favoritar ' + game.name
+                  "
+                  (click)="toggleFavorite(game)"
+                >
+                  {{ isFavorite(game) ? '♥' : '♡' }}
+                </button>
+                <div class="game-card__actions">
+                  @if (game.availableForSale) {
+                    <button
+                      class="rental-button"
+                      type="button"
+                      [class.is-selected]="isInCart(game, 'sale')"
+                      (click)="addToCart(game, 'sale')"
+                    >
+                      {{ isInCart(game, 'sale') ? 'Compra no carrinho' : 'Comprar' }}
+                      <span aria-hidden="true">{{ isInCart(game, 'sale') ? '✓' : '+' }}</span>
+                    </button>
+                  }
+                  @if (game.availableForRental) {
+                    <button
+                      class="rental-button"
+                      type="button"
+                      [class.is-selected]="isInCart(game, 'rental')"
+                      (click)="addToCart(game, 'rental')"
+                    >
+                      {{ isInCart(game, 'rental') ? 'Locação no carrinho' : 'Alugar' }}
+                      <span aria-hidden="true">{{ isInCart(game, 'rental') ? '✓' : '+' }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <span aria-hidden="true">✧</span>
+        <h2>Rerole os dados e pesquise outro jogo, pois não há o que vasculhar nesta masmorra.</h2>
+        <p>Tente outro termo ou retire um filtro para ampliar a busca.</p>
+        <button type="button" (click)="selectTag('Todos'); search.set('')">Limpar busca</button>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="catalog-banner section-shell">
+  <div>
+    <p class="section-kicker">Planejando uma festa ou evento?</p>
+    <h2>Leve mais diversão<br /><em>para o seu evento.</em></h2>
+  </div>
+  <p>
+    Conte com nosso acervo de jogos e monitoria para criar uma experiência divertida para todos.
+  </p>
+  <a class="button button--primary" routerLink="/contato"
+    >Fale com a gente <span aria-hidden="true">→</span></a
+  >
+</section>

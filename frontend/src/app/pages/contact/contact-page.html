@@ -1,0 +1,64 @@
+<section class="page-hero page-hero--contact">
+  <div class="section-shell">
+    <p class="eyebrow"><span>✦</span> Envie um corvo</p>
+    <h1>Vamos preparar<br /><em>a sua aventura.</em></h1>
+    <p>
+      Quer alugar um jogo, tirar uma dúvida ou marcar presença em um evento? A guilda responde
+      rapidinho.
+    </p>
+  </div>
+</section>
+
+<section class="contact-section section-shell">
+  <div class="contact-details">
+    <p class="section-kicker">Fale conosco</p>
+    <h2>Escolha seu<br /><em>caminho.</em></h2>
+    <p>
+      Estamos por perto para indicar jogos, conferir a disponibilidade de um título ou reunir seu
+      grupo em torno da mesa.
+    </p>
+    <a class="contact-method" [href]="whatsappUrl()" target="_blank" rel="noreferrer"
+      ><span aria-hidden="true">◌</span>
+      <div>
+        <small>WhatsApp</small><strong>{{ config()?.phone ?? 'Contato a configurar' }}</strong>
+      </div>
+      <i aria-hidden="true">→</i></a
+    ><a class="contact-method" [href]="'mailto:' + (config()?.email ?? '')"
+      ><span aria-hidden="true">✉</span>
+      <div>
+        <small>E-mail</small><strong>{{ config()?.email ?? 'E-mail a configurar' }}</strong>
+      </div>
+      <i aria-hidden="true">→</i></a
+    >
+    <div class="contact-method contact-method--static">
+      <span aria-hidden="true">⌖</span>
+      <div>
+        <small>Onde nos encontrar</small
+        ><strong>{{ config()?.serviceRegion ?? 'Local a combinar' }}</strong>
+      </div>
+    </div>
+  </div>
+  <div class="contact-card">
+    <p class="section-kicker">Para agilizar o chamado</p>
+    <h2>Conte um pouco<br />da sua <em>mesa.</em></h2>
+    <div class="contact-prompts">
+      <div>
+        <span>01</span>
+        <p>Quantas pessoas vão jogar?</p>
+      </div>
+      <div>
+        <span>02</span>
+        <p>Vocês já têm um jogo em mente?</p>
+      </div>
+      <div>
+        <span>03</span>
+        <p>Para qual data você precisa?</p>
+      </div>
+    </div>
+    <a class="button button--gold" [href]="whatsappUrl()" target="_blank" rel="noreferrer"
+      >Abrir conversa no WhatsApp <span aria-hidden="true">→</span></a
+    ><small>{{
+      config()?.contactMessage ?? 'Configure os dados públicos para exibir a mensagem de contato.'
+    }}</small>
+  </div>
+</section>

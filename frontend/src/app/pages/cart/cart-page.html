@@ -1,0 +1,39 @@
+<section class="page-hero page-hero--cart">
+  <div class="section-shell">
+    <p class="eyebrow"><span>✦</span> Carrinho de locação</p>
+    <h1>Sua mesa está<br /><em>quase pronta.</em></h1>
+    <p>Confira as escolhas antes de falar com a guilda.</p>
+  </div>
+</section>
+<section class="cart-page section-shell">
+  @if (cart.items().length) {
+    <div class="cart-items">
+      @for (game of cart.items(); track game.id) {
+        <article>
+          <div>
+            <span aria-hidden="true">♜</span>
+            <h2>{{ game.name }}</h2>
+          </div>
+          <button type="button" (click)="cart.remove(game.id)">Remover</button>
+        </article>
+      }
+    </div>
+    <aside class="cart-summary-card">
+      <p class="section-kicker">Pedido de locação</p>
+      <h2>Confirme pelo<br /><em>WhatsApp.</em></h2>
+      <p>
+        Não há pagamento nem reserva automática: a guilda confirma preço e disponibilidade com você.
+      </p>
+      <a class="button button--gold" [href]="whatsappUrl()" target="_blank" rel="noreferrer"
+        >Enviar pedido <span aria-hidden="true">→</span></a
+      ><small>{{ message() }}</small>
+    </aside>
+  } @else {
+    <div class="empty-state">
+      <span aria-hidden="true">🛒</span>
+      <h2>O carrinho está vazio.</h2>
+      <p>Adicione jogos do acervo para montar seu pedido de locação.</p>
+      <a class="button button--primary" routerLink="/">Explorar acervo</a>
+    </div>
+  }
+</section>

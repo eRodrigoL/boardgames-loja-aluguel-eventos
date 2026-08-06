@@ -1,0 +1,245 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-shell {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.brand,
+.main-nav {
+  align-items: center;
+  display: flex;
+}
+
+.brand {
+  color: inherit;
+  gap: 0.65rem;
+  text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  height: 2.35rem;
+  object-fit: contain;
+  transform: scale(1.25);
+  width: 2.35rem;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.16rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.brand-name em {
+  color: var(--color-gold);
+  font-family: var(--font-accent);
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 0;
+}
+
+.main-nav {
+  gap: 1.75rem;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.main-nav a:not(.header-cta) {
+  color: var(--color-text-muted);
+  font-size: 0.87rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.main-nav a.active,
+.main-nav a:not(.header-cta):hover {
+  color: var(--color-cream);
+}
+
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.7rem;
+}
+
+.cart-button,
+.login-button {
+  align-items: center;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.cart-button {
+  background: transparent;
+  border: 0;
+  color: var(--color-cream);
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.55rem;
+}
+
+.cart-button:hover {
+  background: rgb(255 255 255 / 9%);
+}
+
+.cart-button__icon {
+  color: var(--color-gold);
+  font-size: 1rem;
+}
+
+.cart-button__count {
+  align-items: center;
+  background: var(--color-gold);
+  border-radius: 50%;
+  color: var(--color-ink);
+  display: inline-flex;
+  font-size: 0.63rem;
+  height: 1.05rem;
+  justify-content: center;
+  min-width: 1.05rem;
+}
+
+.login-button {
+  background: var(--color-plum-light);
+  color: var(--color-cream);
+  padding: 0.62rem 0.95rem;
+}
+
+.login-button:hover {
+  background: var(--color-purple);
+}
+
+.user-menu {
+  position: relative;
+}
+
+.login-button {
+  border: 0;
+  cursor: pointer;
+}
+
+.login-button span {
+  color: var(--color-gold);
+  margin-left: 0.15rem;
+}
+
+.account-menu {
+  background: #fffaf1;
+  border: 1px solid #d8c6b3;
+  border-radius: 0.7rem;
+  box-shadow: 0 14px 32px rgb(0 0 0 / 25%);
+  min-width: 220px;
+  overflow: hidden;
+  padding: 0.4rem;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.6rem);
+  z-index: 30;
+}
+
+.account-menu__identity {
+  border-bottom: 1px solid #e6d9ca;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.7rem 0.75rem;
+  text-decoration: none;
+}
+
+.account-menu__identity strong {
+  color: var(--color-plum);
+  font-size: 0.78rem;
+}
+.account-menu__identity span {
+  color: #806f80;
+  font-size: 0.65rem;
+  overflow-wrap: anywhere;
+}
+.account-menu button,
+.account-menu > a:not(.account-menu__identity) {
+  background: transparent;
+  border: 0;
+  border-radius: 0.35rem;
+  color: #574a59;
+  display: block;
+  font-size: 0.73rem;
+  font-weight: 800;
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+.account-menu button:hover,
+.account-menu > a:not(.account-menu__identity):hover {
+  background: #f0e4d5;
+}
+.account-menu .account-menu__sign-out {
+  color: #a23c60;
+}
+
+.account-menu > .account-menu__site-config {
+  background: linear-gradient(135deg, #3a2548, #694477);
+  color: var(--color-cream);
+  margin-block: 0.25rem;
+}
+
+.account-menu > .account-menu__site-config::before {
+  color: var(--color-gold);
+  content: '⚙';
+  margin-right: 0.45rem;
+}
+
+.account-menu > .account-menu__site-config:hover {
+  background: linear-gradient(135deg, #4d2f5c, #80548f);
+}
+
+.menu-toggle {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: none;
+  padding: 0.4rem;
+}
+
+.menu-toggle span {
+  background: var(--color-cream);
+  display: block;
+  height: 2px;
+  margin: 4px;
+  width: 22px;
+}
+
+@media (max-width: 760px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    background: var(--color-ink);
+    border-bottom: 1px solid var(--color-border);
+    display: none;
+    flex-direction: column;
+    gap: 1.25rem;
+    left: 0;
+    padding: 1.5rem var(--page-gutter) 2rem;
+    position: absolute;
+    right: 0;
+    top: 100%;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .main-nav.is-open {
+    display: flex;
+  }
+}

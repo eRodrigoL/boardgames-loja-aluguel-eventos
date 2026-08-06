@@ -1,0 +1,50 @@
+<section class="auth-page section-shell">
+  <div class="auth-card">
+    <p class="section-kicker">A sua mochila</p>
+    <h1>Entre para guardar<br /><em>suas escolhas.</em></h1>
+    <p>Favoritos e carrinho ficam associados à sua conta, em qualquer retorno à guilda.</p>
+    <div class="demo-accounts" aria-label="Perfis de demonstração">
+      <p>Perfis para visualizar o site</p>
+      <button class="social-button" type="button" (click)="loginAs('member')">
+        <b aria-hidden="true">◌</b>
+        Entrar como <strong>Comum</strong>
+        <small>Favoritos e carrinho</small>
+      </button>
+      <button class="social-button" type="button" (click)="loginAs('admin')">
+        <b aria-hidden="true">✦</b>
+        Entrar como <strong>Privilegiado</strong>
+        <small>Inclui opções de adicionar, editar e excluir</small>
+      </button>
+      <button class="social-button" type="button" (click)="loginAs('super_admin')">
+        <b aria-hidden="true">✦</b>
+        Entrar com <strong>Acesso total</strong>
+        <small>Inclui a gestão de privilégios de usuários</small>
+      </button>
+    </div>
+    <label class="form-field"
+      >E-mail
+      <input
+        type="email"
+        [ngModel]="email()"
+        (ngModelChange)="email.set($event)"
+        placeholder="voce@exemplo.com"
+        autocomplete="email"
+      />
+    </label>
+    @if (error()) {
+      <p class="form-error">{{ error() }}</p>
+    }
+    <button class="button button--primary" type="button" (click)="login('email')">
+      Continuar com e-mail <span aria-hidden="true">→</span>
+    </button>
+    <div class="auth-divider"><span>ou</span></div>
+    <button class="social-button" type="button" (click)="login('google')">
+      <b>G</b> Continuar com Google
+    </button>
+    <button class="social-button" type="button" (click)="login('apple')">
+      <b>●</b> Continuar com Apple
+    </button>
+    <small>Use “Sair” no cabeçalho para voltar ao estado deslogado.</small>
+    <a routerLink="/">Voltar ao acervo</a>
+  </div>
+</section>

@@ -1,0 +1,96 @@
+@if (game(); as item) {
+  <section class="detail-page section-shell">
+    <a class="back-link" routerLink="/">← Voltar ao acervo</a>
+    <div class="detail-layout">
+      <div [class]="'detail-art game-art game-art--' + (item.art ?? 'forest')">
+        @if (item.images[0]; as image) {
+          <img
+            class="game-art__image"
+            [src]="image.url"
+            [alt]="image.altText ?? 'Capa de ' + item.name"
+          />
+        }
+        <span class="game-art__badge">{{ item.tags[0]?.name ?? 'Acervo' }}</span>
+        @if (!item.images.length) {
+          <span class="game-art__sigil" aria-hidden="true">✦</span>
+        }
+        <span class="game-art__title">{{ item.name }}</span>
+      </div>
+      <div>
+        <p class="section-kicker">{{ item.publisher ?? 'Editora a confirmar' }}</p>
+        <h1>{{ item.name }}</h1>
+        <p class="detail-copy">{{ item.description }}</p>
+        <dl class="detail-facts">
+          <div>
+            <dt>Jogadores</dt>
+            <dd>{{ item.minPlayers ?? 1 }}–{{ item.maxPlayers ?? '+' }}</dd>
+          </div>
+          <div>
+            <dt>Duração</dt>
+            <dd>{{ item.averageDurationMinutes ?? '—' }} min</dd>
+          </div>
+          <div>
+            <dt>Aluguel semanal</dt>
+            <dd>{{ price() }}</dd>
+          </div>
+        </dl>
+        <div class="detail-actions">
+          @if (item.availableForSale) {
+            <div class="detail-action-pair">
+              <button class="button button--primary" type="button" (click)="addToCart('sale')">
+                {{ cart.has(item.id, 'sale') ? 'Remover compra' : 'Adicionar para compra' }}
+              </button>
+              <button
+                class="favorite-button favorite-button--large"
+                type="button"
+                [class.is-selected]="favorites.has(item.id, 'sale')"
+                (click)="toggleFavorite('sale')"
+              >
+                {{ favorites.has(item.id, 'sale') ? '♥ Lista de desejos' : '♡ Lista de desejos' }}
+              </button>
+            </div>
+          }
+          @if (item.availableForRental) {
+            <div class="detail-action-pair">
+              <button class="button button--primary" type="button" (click)="addToCart('rental')">
+                {{ cart.has(item.id, 'rental') ? 'Remover locação' : 'Adicionar para locação' }}
+              </button>
+              <button
+                class="favorite-button favorite-button--large"
+                type="button"
+                [class.is-selected]="favorites.has(item.id, 'rental')"
+                (click)="toggleFavorite('rental')"
+              >
+                {{
+                  favorites.has(item.id, 'rental')
+                    ? '♥ Favorito de locação'
+                    : '♡ Favorito de locação'
+                }}
+              </button>
+            </div>
+          }
+        </div>
+        @if (auth.isAdmin()) {
+          <div class="admin-detail-actions">
+            <a class="button button--outline-dark" [routerLink]="['/admin/jogos', item.id]"
+              >Editar jogo</a
+            ><button type="button" class="danger-button" (click)="deleteGame()">
+              Excluir jogo
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+    @if (item.fullDescription) {
+      <article class="full-description">
+        <p class="section-kicker">Sobre o jogo</p>
+        <p>{{ item.fullDescription }}</p>
+      </article>
+    }
+  </section>
+} @else {
+  <section class="section-shell empty-state">
+    <h2>Jogo não encontrado.</h2>
+    <a routerLink="/">Voltar ao acervo</a>
+  </section>
+}

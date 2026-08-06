@@ -1,0 +1,193 @@
+<section class="detail-page section-shell editor-page">
+  <a class="back-link" routerLink="/">← Voltar ao acervo</a>
+  <div class="detail-layout editor-detail-layout">
+    <div class="detail-art game-art game-art--forest editor-preview">
+      @if (selectedImages()[0]; as image) {
+        <img [src]="image.previewUrl" alt="Prévia da capa do jogo" />
+      } @else {
+        <span class="game-art__badge">{{ draft().tags || 'Acervo' }}</span>
+        <span class="game-art__sigil">✦</span>
+        <span class="game-art__title">{{ draft().name || 'Novo jogo' }}</span>
+      }
+      <div class="image-upload">
+        <label class="form-field" for="game-images">Imagens do jogo</label
+        ><input
+          id="game-images"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          (change)="selectImages($event)"
+        /><small
+          >JPEG, PNG ou WebP, até 8 MB por arquivo. Máximo de cinco imagens; a primeira será a
+          capa.</small
+        >
+        @if (selectedImages().length) {
+          <div class="image-preview-list">
+            @for (image of selectedImages(); track image.previewUrl; let index = $index) {
+              <figure>
+                <img [src]="image.previewUrl" [alt]="'Prévia da imagem ' + (index + 1)" /><button
+                  type="button"
+                  (click)="removeSelectedImage(index)"
+                >
+                  Remover
+                </button>
+              </figure>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    <div class="editor-content">
+      <p class="section-kicker">
+        {{ id === 'novo' ? 'Novo item no acervo' : 'Editando item do acervo' }}
+      </p>
+      <input
+        class="editor-title"
+        maxlength="200"
+        [ngModel]="draft().name"
+        (ngModelChange)="update('name', $event)"
+        (blur)="checkDuplicateName()"
+        placeholder="Nome do jogo"
+        aria-label="Nome do jogo"
+      />
+      <p class="editor-intro">Preencha os detalhes que aparecerão para quem consulta este jogo.</p>
+      <div class="editor-fields editor-fields--game">
+        <label class="form-field"
+          >Slug
+          <span class="info-tip" tabindex="0" aria-label="Informação sobre slug"
+            >i<span role="tooltip"
+              >Identificador único usado na URL e para diferenciar este jogo dos demais.</span
+            ></span
+          ><input
+            maxlength="120"
+            pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+            [ngModel]="draft().slug"
+            (ngModelChange)="update('slug', $event)"
+        /></label>
+        <label class="form-field"
+          >Editora<input
+            maxlength="120"
+            [ngModel]="draft().publisher"
+            (ngModelChange)="update('publisher', $event || null)"
+        /></label>
+        <label class="form-field"
+          >Tags<input
+            maxlength="1200"
+            [ngModel]="draft().tags"
+            (ngModelChange)="update('tags', $event)"
+            placeholder="Estratégia, Fantasia"
+        /></label>
+        <label class="form-field"
+          >Disponibilidade<select
+            [ngModel]="draft().availability"
+            (ngModelChange)="update('availability', $event)"
+          >
+            <option value="available">Disponível</option>
+            <option value="rented">Alugado</option>
+            <option value="reserved">Reservado</option>
+            <option value="maintenance">Em manutenção</option>
+            <option value="unavailable">Indisponível</option>
+          </select></label
+        >
+        <label class="form-field"
+          >Mín. jogadores<input
+            type="number"
+            min="1"
+            max="100"
+            [ngModel]="draft().minPlayers"
+            (ngModelChange)="update('minPlayers', $event)"
+        /></label>
+        <label class="form-field"
+          >Máx. jogadores<input
+            type="number"
+            min="1"
+            max="100"
+            [ngModel]="draft().maxPlayers"
+            (ngModelChange)="update('maxPlayers', $event)"
+        /></label>
+        <label class="form-field"
+          >Duração (minutos)<input
+            type="number"
+            min="1"
+            max="1440"
+            [ngModel]="draft().averageDurationMinutes"
+            (ngModelChange)="update('averageDurationMinutes', $event)"
+        /></label>
+        <label class="form-field"
+          >Preço de venda (R$)<input
+            type="text"
+            inputmode="decimal"
+            [ngModel]="salePriceInReais()"
+            (ngModelChange)="updateSalePrice($event)"
+            (blur)="formatSalePrice()"
+            placeholder="0,00"
+        /></label>
+        <label class="form-field"
+          >Preço semanal (R$)<input
+            type="text"
+            inputmode="decimal"
+            [ngModel]="priceInReais()"
+            (ngModelChange)="updatePrice($event)"
+            (blur)="formatPrice()"
+            placeholder="0,00"
+        /></label>
+      </div>
+      <label class="form-field"
+        >Chamada curta<textarea
+          rows="5"
+          maxlength="10000"
+          [ngModel]="draft().description"
+          (ngModelChange)="update('description', $event)"
+        ></textarea>
+      </label>
+      <label class="form-field"
+        >Descrição completa<textarea
+          rows="7"
+          maxlength="10000"
+          [ngModel]="draft().fullDescription"
+          (ngModelChange)="update('fullDescription', $event)"
+        ></textarea>
+      </label>
+      <label class="checkbox-field"
+        ><input
+          type="checkbox"
+          [ngModel]="draft().featured"
+          (ngModelChange)="update('featured', $event)"
+        />
+        Destacar no acervo</label
+      >
+      <div class="editor-option-row">
+        <label class="checkbox-field"
+          ><input
+            type="checkbox"
+            [ngModel]="draft().availableForSale"
+            (ngModelChange)="update('availableForSale', $event)"
+          />
+          Disponível para venda</label
+        >
+        <label class="checkbox-field"
+          ><input
+            type="checkbox"
+            [ngModel]="draft().availableForRental"
+            (ngModelChange)="update('availableForRental', $event)"
+          />
+          Disponível para locação</label
+        >
+      </div>
+      @if (error()) {
+        <p class="form-error">{{ error() }}</p>
+      }
+      <div class="admin-detail-actions">
+        <a class="button button--outline-dark" routerLink="/">Cancelar</a
+        ><button
+          class="button button--primary"
+          type="button"
+          [disabled]="saving()"
+          (click)="save()"
+        >
+          {{ saving() ? 'Salvando...' : 'Salvar jogo' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<section class="profile-form-page section-shell">
+  <a class="back-link" routerLink="/perfil">← Voltar ao perfil</a>
+  <div class="account-form-card">
+    <p class="section-kicker">Sua conta</p>
+    <h1>Editar perfil</h1>
+    <p>Estas informações aparecem apenas para você na sua conta.</p>
+    <label class="form-field"
+      >Nome<input maxlength="120" [ngModel]="name()" (ngModelChange)="name.set($event)"
+    /></label>
+    <label class="form-field"
+      >Telefone (opcional)<input
+        maxlength="120"
+        [ngModel]="phone()"
+        (ngModelChange)="phone.set($event)"
+    /></label>
+    <label class="form-field"
+      >Cidade ou região (opcional)<input
+        maxlength="120"
+        [ngModel]="city()"
+        (ngModelChange)="city.set($event)"
+    /></label>
+    @if (error()) {
+      <p class="form-error">{{ error() }}</p>
+    }
+    <div class="admin-detail-actions">
+      <a class="button button--outline-dark" routerLink="/perfil">Cancelar</a>
+      <button class="button button--primary" type="button" (click)="save()">Salvar perfil</button>
+    </div>
+  </div>
+</section>

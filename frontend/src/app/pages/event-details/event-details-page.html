@@ -1,0 +1,52 @@
+@if (event(); as item) {
+  <section class="detail-page section-shell">
+    <a class="back-link" routerLink="/eventos">← Voltar aos eventos</a>
+    <div class="event-detail-layout">
+      <div class="event-detail">
+        <p class="section-kicker">{{ date(item.startsAt) }}</p>
+        <h1>{{ item.title }}</h1>
+        <p class="detail-copy">{{ item.description }}</p>
+        <dl class="detail-facts">
+          <div>
+            <dt>Local</dt>
+            <dd>{{ item.location ?? 'A confirmar' }}</dd>
+          </div>
+          <div>
+            <dt>Encontro</dt>
+            <dd>{{ item.endsAt ? 'Com término previsto' : 'Sem horário de término definido' }}</dd>
+          </div>
+        </dl>
+        <a class="button button--primary" routerLink="/contato"
+          >Confirmar presença <span aria-hidden="true">→</span></a
+        >
+        @if (auth.isAdmin()) {
+          <div class="admin-detail-actions">
+            <a class="button button--outline-dark" [routerLink]="['/admin/eventos', item.id]"
+              >Editar evento</a
+            ><button type="button" class="danger-button" (click)="deleteEvent()">
+              Excluir evento
+            </button>
+          </div>
+        }
+      </div>
+      <div class="event-poster">
+        @if (item.coverImageUrl) {
+          <img [src]="item.coverImageUrl" [alt]="'Imagem de divulgação de ' + item.title" />
+        } @else {
+          <span>✦</span><strong>{{ item.title }}</strong>
+        }
+      </div>
+    </div>
+    @if (item.fullDescription) {
+      <article class="full-description">
+        <p class="section-kicker">Sobre o evento</p>
+        <p>{{ item.fullDescription }}</p>
+      </article>
+    }
+  </section>
+} @else {
+  <section class="section-shell empty-state">
+    <h2>Evento não encontrado.</h2>
+    <a routerLink="/eventos">Voltar aos eventos</a>
+  </section>
+}

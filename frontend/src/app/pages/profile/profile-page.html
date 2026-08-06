@@ -1,0 +1,59 @@
+<section class="page-hero page-hero--cart">
+  <div class="section-shell">
+    <p class="eyebrow"><span>✦</span> Sua conta</p>
+    <h1>O seu perfil<br /><em>na guilda.</em></h1>
+  </div>
+</section>
+
+@if (auth.user(); as user) {
+  <section class="profile-page section-shell">
+    <div class="profile-summary">
+      <div class="profile-monogram" aria-hidden="true">
+        {{ user.name.slice(0, 1).toUpperCase() }}
+      </div>
+      <div>
+        <p class="section-kicker">{{ roleName(user.role) }}</p>
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+        @if (user.phone) {
+          <p>{{ user.phone }}</p>
+        }
+        @if (user.city) {
+          <p>{{ user.city }}</p>
+        }
+      </div>
+      <a class="button button--outline-dark" routerLink="/perfil/editar">Editar perfil</a>
+    </div>
+
+    <div class="profile-favorites">
+      <section>
+        <p class="section-kicker">Para alugar</p>
+        <h2>Favoritos de locação</h2>
+        @if (rentalFavorites().length) {
+          <div class="profile-game-list">
+            @for (game of rentalFavorites(); track game.id) {
+              <a [routerLink]="['/jogos', game.slug]">{{ game.name }} <span>→</span></a>
+            }
+          </div>
+        } @else {
+          <p class="empty-list">
+            Use “Favorito de locação” na página de um jogo para guardá-lo aqui.
+          </p>
+        }
+      </section>
+      <section>
+        <p class="section-kicker">Para comprar</p>
+        <h2>Lista de desejos</h2>
+        @if (saleFavorites().length) {
+          <div class="profile-game-list">
+            @for (game of saleFavorites(); track game.id) {
+              <a [routerLink]="['/jogos', game.slug]">{{ game.name }} <span>→</span></a>
+            }
+          </div>
+        } @else {
+          <p class="empty-list">Use “Lista de desejos” na página de um jogo para guardá-lo aqui.</p>
+        }
+      </section>
+    </div>
+  </section>
+}

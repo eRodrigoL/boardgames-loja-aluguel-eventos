@@ -1,0 +1,70 @@
+@if (drawer.isOpen()) {
+  <div class="cart-backdrop" (click)="drawer.close()">
+    <aside
+      class="cart-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Carrinho de locação"
+      (click)="$event.stopPropagation()"
+    >
+      <header>
+        <div>
+          <p class="section-kicker">Carrinho de locação</p>
+          <h2>Sua mesa</h2>
+        </div>
+        <button type="button" aria-label="Fechar carrinho" (click)="drawer.close()">×</button>
+      </header>
+      @if (cart.items().length) {
+        <div class="cart-drawer__items">
+          @for (game of cart.items(); track game.id) {
+            <article>
+              <span aria-hidden="true">♜</span>
+              <div class="cart-item__details">
+                <strong>{{ game.name }}</strong
+                ><small>{{ game.fulfillment === 'sale' ? 'Compra' : 'Locação' }}</small
+                ><span>{{ formatMoney(game.unitPriceCents) }} cada</span>
+              </div>
+              <button type="button" (click)="cart.remove(game.id, game.fulfillment)">
+                Remover
+              </button>
+              <div class="quantity-control" aria-label="Quantidade de {{ game.name }}">
+                <button
+                  type="button"
+                  aria-label="Diminuir quantidade"
+                  (click)="cart.changeQuantity(game.id, game.fulfillment, -1)"
+                >
+                  −</button
+                ><span>{{ game.quantity }}</span
+                ><button
+                  type="button"
+                  aria-label="Aumentar quantidade"
+                  (click)="cart.changeQuantity(game.id, game.fulfillment, 1)"
+                >
+                  +
+                </button>
+              </div>
+              <strong class="cart-item__total">{{ formatMoney(itemTotal(game)) }}</strong>
+            </article>
+          }
+        </div>
+        <footer>
+          <div class="cart-total">
+            <span>Total estimado</span><strong>{{ formatMoney(cart.totalCents()) }}</strong>
+          </div>
+          <p>
+            Os valores são estimados. Antes de finalizar, a guilda confirma preço e disponibilidade
+            de cada item.
+          </p>
+          <a class="button button--gold" [href]="whatsappUrl()" target="_blank" rel="noreferrer"
+            >Enviar pelo WhatsApp <span aria-hidden="true">→</span></a
+          >
+        </footer>
+      } @else {
+        <div class="cart-drawer__empty">
+          <span aria-hidden="true">🛒</span>
+          <p>Seu carrinho está vazio.</p>
+        </div>
+      }
+    </aside>
+  </div>
+}

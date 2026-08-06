@@ -1,0 +1,113 @@
+<section class="detail-page section-shell editor-page">
+  <a class="back-link" routerLink="/eventos">← Voltar aos eventos</a>
+  <div class="event-detail-layout editor-detail-layout">
+    <div class="editor-content">
+      <p class="section-kicker">{{ id === 'novo' ? 'Novo encontro' : 'Editando encontro' }}</p>
+      <input
+        class="editor-title"
+        maxlength="200"
+        [ngModel]="draft().title"
+        (ngModelChange)="update('title', $event)"
+        (blur)="checkDuplicateTitle()"
+        placeholder="Título do evento"
+        aria-label="Título do evento"
+      />
+      <p class="editor-intro">Organize as informações que aparecerão na divulgação do encontro.</p>
+      <div class="editor-fields">
+        <label class="form-field"
+          >Slug
+          <span class="info-tip" tabindex="0" aria-label="Informação sobre slug"
+            >i<span role="tooltip"
+              >Identificador único usado na URL e para diferenciar este evento dos demais.</span
+            ></span
+          ><input
+            maxlength="120"
+            pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+            [ngModel]="draft().slug"
+            (ngModelChange)="update('slug', $event)"
+        /></label>
+        <label class="form-field"
+          >Local<input
+            maxlength="10000"
+            [ngModel]="draft().location"
+            (ngModelChange)="update('location', $event || null)"
+        /></label>
+        <label class="form-field"
+          >Início<input
+            type="datetime-local"
+            [ngModel]="draft().startsAt"
+            (ngModelChange)="update('startsAt', $event)"
+        /></label>
+        <label class="form-field"
+          >Término (opcional)<input
+            type="datetime-local"
+            [ngModel]="draft().endsAt"
+            (ngModelChange)="update('endsAt', $event || null)"
+        /></label>
+      </div>
+      <label class="form-field"
+        >Resumo<input
+          maxlength="10000"
+          [ngModel]="draft().summary"
+          (ngModelChange)="update('summary', $event || null)"
+      /></label>
+      <label class="form-field"
+        >Chamada curta<textarea
+          rows="6"
+          maxlength="20000"
+          [ngModel]="draft().description"
+          (ngModelChange)="update('description', $event)"
+        ></textarea>
+      </label>
+      <label class="form-field"
+        >Descrição completa<textarea
+          rows="7"
+          maxlength="10000"
+          [ngModel]="draft().fullDescription"
+          (ngModelChange)="update('fullDescription', $event)"
+        ></textarea>
+      </label>
+      <label class="checkbox-field"
+        ><input
+          type="checkbox"
+          [ngModel]="draft().featured"
+          (ngModelChange)="update('featured', $event)"
+        />
+        Destacar este evento</label
+      >
+      @if (error()) {
+        <p class="form-error">{{ error() }}</p>
+      }
+      <div class="admin-detail-actions">
+        <a class="button button--outline-dark" routerLink="/eventos">Cancelar</a
+        ><button
+          class="button button--primary"
+          type="button"
+          [disabled]="saving()"
+          (click)="save()"
+        >
+          {{ saving() ? 'Salvando...' : 'Salvar evento' }}
+        </button>
+      </div>
+    </div>
+    <div class="event-poster editor-preview">
+      @if (selectedCover(); as cover) {
+        <img [src]="cover.previewUrl" alt="Prévia da capa do evento" />
+      } @else {
+        <span>✦</span><strong>{{ draft().title || 'Novo evento' }}</strong>
+      }
+      <div class="image-upload">
+        <label class="form-field" for="event-cover">Imagem de divulgação</label
+        ><input
+          id="event-cover"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="selectCover($event)"
+        /><small>JPEG, PNG ou WebP, até 8 MB.</small>
+        @if (selectedCover()) {
+          <button type="button" (click)="removeCover()">Remover imagem</button>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,36 @@
+<footer class="site-footer">
+  <div class="footer-shell">
+    <div>
+      <a class="brand footer-brand" routerLink="/">
+        @if (siteConfig.config()?.logoUrl; as logoUrl) {
+          <img class="brand-logo" [src]="logoUrl" alt="" aria-hidden="true" />
+        }
+        <span class="brand-name">{{
+          siteConfig.config()?.businessName ?? 'Aluguel de jogos'
+        }}</span>
+      </a>
+      <p>Jogos, histórias e boas companhias ao redor da mesa.</p>
+    </div>
+    <div class="footer-links">
+      <a routerLink="/">Acervo</a>
+      <a routerLink="/eventos">Eventos</a>
+      <a routerLink="/contato">Contato</a>
+      @for (socialLink of siteConfig.config()?.socialLinks | keyvalue; track socialLink.key) {
+        <a [href]="socialLink.value" target="_blank" rel="noopener noreferrer">{{
+          socialName(socialLink.key)
+        }}</a>
+      }
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © {{ currentYear }} {{ siteConfig.config()?.businessName ?? 'Aluguel de jogos' }}
+    @if (siteConfig.config(); as config) {
+      @if (config.developerCreditName && config.developerCreditUrl) {
+        <span aria-hidden="true">✦</span> Desenvolvido por
+        <a [href]="config.developerCreditUrl" target="_blank" rel="noopener noreferrer">{{
+          config.developerCreditName
+        }}</a>
+      }
+    }
+  </div>
+</footer>

@@ -1,0 +1,83 @@
+<section class="page-hero page-hero--cart">
+  <div class="section-shell">
+    <p class="eyebrow"><span>✦</span> Sua lista</p>
+    <h1>Jogos para não<br /><em>perder de vista.</em></h1>
+  </div>
+</section>
+<section class="favorites-page section-shell">
+  @if (rentalItems().length || saleItems().length) {
+    <div class="favorites-groups">
+      <section>
+        <p class="section-kicker">Para alugar</p>
+        <h2>Favoritos de locação</h2>
+        @if (rentalItems().length) {
+          <div class="game-grid">
+            @for (game of rentalItems(); track game.id) {
+              <article class="game-card">
+                <a
+                  [routerLink]="['/jogos', game.slug]"
+                  [class]="'game-art game-art--' + (game.art ?? 'forest')"
+                  ><span class="game-art__title">{{ game.name }}</span></a
+                >
+                <div class="game-card__body">
+                  <h2>
+                    <a [routerLink]="['/jogos', game.slug]">{{ game.name }}</a>
+                  </h2>
+                  <p>{{ game.description }}</p>
+                  <button
+                    class="rental-button"
+                    type="button"
+                    (click)="favorites.toggle(game.id, 'rental')"
+                  >
+                    Remover dos favoritos
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="empty-list">Ainda não há jogos marcados para locação.</p>
+        }
+      </section>
+      <section>
+        <p class="section-kicker">Para comprar</p>
+        <h2>Lista de desejos</h2>
+        @if (saleItems().length) {
+          <div class="game-grid">
+            @for (game of saleItems(); track game.id) {
+              <article class="game-card">
+                <a
+                  [routerLink]="['/jogos', game.slug]"
+                  [class]="'game-art game-art--' + (game.art ?? 'forest')"
+                  ><span class="game-art__title">{{ game.name }}</span></a
+                >
+                <div class="game-card__body">
+                  <h2>
+                    <a [routerLink]="['/jogos', game.slug]">{{ game.name }}</a>
+                  </h2>
+                  <p>{{ game.description }}</p>
+                  <button
+                    class="rental-button"
+                    type="button"
+                    (click)="favorites.toggle(game.id, 'sale')"
+                  >
+                    Remover da lista de desejos
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="empty-list">Ainda não há jogos desejados para compra.</p>
+        }
+      </section>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <span aria-hidden="true">♡</span>
+      <h2>Nenhum favorito ainda.</h2>
+      <p>Use o coração nos jogos que quer lembrar depois.</p>
+      <a class="button button--primary" routerLink="/">Ver acervo</a>
+    </div>
+  }
+</section>
