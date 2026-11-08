@@ -19,7 +19,7 @@
             @if (config()?.logoUrl; as logoUrl) {
               <img [src]="logoUrl" alt="Logo atual" />
             } @else {
-              <span>Sem logo</span>
+              <span class="brand-asset-card__empty">Sem<br />logo</span>
             }
           </div>
           <div>
@@ -54,7 +54,7 @@
             @if (config()?.iconUrl; as iconUrl) {
               <img [src]="iconUrl" alt="Ícone atual" />
             } @else {
-              <span>Sem ícone</span>
+              <span class="brand-asset-card__empty">Sem<br />ícone</span>
             }
           </div>
           <div>

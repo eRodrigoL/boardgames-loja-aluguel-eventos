@@ -151,68 +151,73 @@
         }
         @for (game of filteredGames(); track game.id) {
           <article class="game-card game-card--catalog">
-            <a [class]="'game-art game-art--' + gameArt(game)" [routerLink]="['/jogos', game.slug]">
-              @if (game.images[0]; as image) {
-                <img
-                  class="game-art__image"
-                  [src]="image.url"
-                  [alt]="image.altText ?? 'Capa de ' + game.name"
-                />
-              }
-              <span class="game-art__badge">{{ game.tags[0]?.name ?? 'Acervo' }}</span>
-              @if (!game.images.length) {
-                <span class="game-art__sigil" aria-hidden="true">✦</span>
-              }
-              <span class="game-art__title">{{ game.name }}</span>
-            </a>
-            <div class="game-card__body">
-              <div class="game-card__topline">
-                <p class="game-card__meta">
-                  {{ gamePlayers(game) }} <span>•</span> {{ gameDuration(game) }}
-                </p>
-              </div>
-              <h2>
-                <a [routerLink]="['/jogos', game.slug]">{{ game.name }}</a>
-              </h2>
-              <p>{{ game.description }}</p>
-              <div class="game-card__footer">
-                <span>{{ game.publisher ?? 'Editora a confirmar' }}</span>
-                <button
-                  class="favorite-button"
-                  type="button"
-                  [class.is-selected]="isFavorite(game)"
-                  [attr.aria-label]="
-                    isFavorite(game)
-                      ? 'Remover ' + game.name + ' dos favoritos'
-                      : 'Favoritar ' + game.name
-                  "
-                  (click)="toggleFavorite(game)"
-                >
-                  {{ isFavorite(game) ? '♥' : '♡' }}
-                </button>
-                <div class="game-card__actions">
-                  @if (game.availableForSale) {
-                    <button
-                      class="rental-button"
-                      type="button"
-                      [class.is-selected]="isInCart(game, 'sale')"
-                      (click)="addToCart(game, 'sale')"
-                    >
-                      {{ isInCart(game, 'sale') ? 'Compra no carrinho' : 'Comprar' }}
-                      <span aria-hidden="true">{{ isInCart(game, 'sale') ? '✓' : '+' }}</span>
-                    </button>
-                  }
-                  @if (game.availableForRental) {
-                    <button
-                      class="rental-button"
-                      type="button"
-                      [class.is-selected]="isInCart(game, 'rental')"
-                      (click)="addToCart(game, 'rental')"
-                    >
-                      {{ isInCart(game, 'rental') ? 'Locação no carrinho' : 'Alugar' }}
-                      <span aria-hidden="true">{{ isInCart(game, 'rental') ? '✓' : '+' }}</span>
-                    </button>
-                  }
+            <div class="game-card__tile-content">
+              <a
+                [class]="'game-art game-art--' + gameArt(game)"
+                [routerLink]="['/jogos', game.slug]"
+              >
+                @if (game.images[0]; as image) {
+                  <img
+                    class="game-art__image"
+                    [src]="image.url"
+                    [alt]="image.altText ?? 'Capa de ' + game.name"
+                  />
+                }
+                <span class="game-art__badge">{{ game.tags[0]?.name ?? 'Acervo' }}</span>
+                @if (!game.images.length) {
+                  <span class="game-art__sigil" aria-hidden="true">✦</span>
+                }
+                <span class="game-art__title">{{ game.name }}</span>
+              </a>
+              <div class="game-card__body">
+                <div class="game-card__topline">
+                  <p class="game-card__meta">
+                    {{ gamePlayers(game) }} <span>•</span> {{ gameDuration(game) }}
+                  </p>
+                </div>
+                <h2>
+                  <a [routerLink]="['/jogos', game.slug]">{{ game.name }}</a>
+                </h2>
+                <p>{{ game.description }}</p>
+                <div class="game-card__footer">
+                  <span>{{ game.publisher ?? 'Editora a confirmar' }}</span>
+                  <button
+                    class="favorite-button"
+                    type="button"
+                    [class.is-selected]="isFavorite(game)"
+                    [attr.aria-label]="
+                      isFavorite(game)
+                        ? 'Remover ' + game.name + ' dos favoritos'
+                        : 'Favoritar ' + game.name
+                    "
+                    (click)="toggleFavorite(game)"
+                  >
+                    {{ isFavorite(game) ? '♥' : '♡' }}
+                  </button>
+                  <div class="game-card__actions">
+                    @if (game.availableForSale) {
+                      <button
+                        class="rental-button"
+                        type="button"
+                        [class.is-selected]="isInCart(game, 'sale')"
+                        (click)="addToCart(game, 'sale')"
+                      >
+                        {{ isInCart(game, 'sale') ? 'Compra no carrinho' : 'Comprar' }}
+                        <span aria-hidden="true">{{ isInCart(game, 'sale') ? '✓' : '+' }}</span>
+                      </button>
+                    }
+                    @if (game.availableForRental) {
+                      <button
+                        class="rental-button"
+                        type="button"
+                        [class.is-selected]="isInCart(game, 'rental')"
+                        (click)="addToCart(game, 'rental')"
+                      >
+                        {{ isInCart(game, 'rental') ? 'Locação no carrinho' : 'Alugar' }}
+                        <span aria-hidden="true">{{ isInCart(game, 'rental') ? '✓' : '+' }}</span>
+                      </button>
+                    }
+                  </div>
                 </div>
               </div>
             </div>

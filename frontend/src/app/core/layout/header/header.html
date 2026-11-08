@@ -10,6 +10,10 @@
     >
       @if (siteConfig.config()?.logoUrl; as logoUrl) {
         <img class="brand-logo" [src]="logoUrl" alt="" aria-hidden="true" />
+      } @else {
+        <span class="brand-logo-placeholder" aria-hidden="true"
+          ><span>Sem</span><span>logo</span></span
+        >
       }
       <span class="brand-name">{{ siteConfig.config()?.businessName ?? 'Aluguel de jogos' }}</span>
     </a>
