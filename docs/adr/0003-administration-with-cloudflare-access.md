@@ -6,4 +6,7 @@ Todas as rotas `/api/admin` exigem Bearer JWT do Cloudflare Access. A aplicaçã
 
 ## Consequências
 
-Não há contas ou senhas próprias nesta versão. A equipe precisa configurar uma aplicação Access e fornecer emissor, audiência e URL JWKS ao Worker.
+Cloudflare Access é responsável pela autenticação administrativa. Perfis locais e
+papéis de autorização complementam a identidade validada pelo Access; não o
+substituem. A equipe precisa configurar uma aplicação Access e fornecer emissor,
+audiência e URL JWKS ao Worker.

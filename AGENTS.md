@@ -2,6 +2,12 @@
 
 Estas regras são portáveis: aplicam-se a qualquer agente e sistema operacional. Siga-as antes de alterar arquivos. Instruções explícitas do usuário têm prioridade; não relaxam segurança, segredos ou ações remotas sem autorização clara.
 
+## Documentação e convenções
+
+- Leia [CONTRIBUTING.md](CONTRIBUTING.md) para o fluxo de contribuição e continuidade.
+- Siga [docs/git-conventions.md](docs/git-conventions.md) para branches e commits.
+- Mantenha guias permanentes livres de status de sessões, tarefas temporárias e caminhos de máquinas.
+
 ## Contexto e limites
 
 - Produto: catálogo público e administração de aluguel presencial de jogos de tabuleiro e eventos.

@@ -2,6 +2,12 @@
 
 Aplicação para divulgar e administrar aluguel presencial de jogos de tabuleiro e eventos. O projeto inclui uma API em Cloudflare Workers e um frontend Angular separado. Pagamentos, checkout, reserva on-line e processamento financeiro não fazem parte do escopo atual.
 
+## Contribuição e continuidade
+
+Consulte [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md) e as
+[convenções Git](docs/git-conventions.md) antes de alterar o projeto. As decisões
+de arquitetura estão em [docs/adr/](docs/adr/).
+
 ## Arquitetura
 
 - **API:** TypeScript, Cloudflare Workers, Hono, D1, R2, Drizzle, Zod e JOSE.
@@ -11,7 +17,8 @@ Aplicação para divulgar e administrar aluguel presencial de jogos de tabuleiro
 
 ## Pré-requisitos
 
-- Node.js e npm compatíveis com os `package.json` do repositório;
+- Node.js compatível com os requisitos das ferramentas fixadas nos lockfiles e npm
+  conforme o `packageManager` do pacote, quando declarado;
 - Git;
 - uma conta Cloudflare apenas para configurar ou implantar recursos remotos.
 
